@@ -1,25 +1,17 @@
-const {Router} = require ('express');
+const { Router } = require('express');
+const { getAllWork, getWork, createWork, deleteWork, updateWork } = require('../controllers/work.controller.js');
+//const pool = require('../config');
 
 const router = Router();
 
-router.get('/work', (req, res) => {
-    res.send("Get Puto");
-});
+router.get('/work', getAllWork);
 
-router.get('/work/1', (req, res) => [
-    res.send("Te liste Putoooo")
-]);
+router.get('/work/1', getWork);
 
-router.post('/work/', (req, res) => [
-    res.send("Post Puto")
-]);
+router.post('/work/', createWork);
 
-router.delete('/work/', (req, res) => [
-    res.send("Te Elimine Putoooo")
-]);
+router.delete('/work/', deleteWork);
 
-router.put('/work/', (req, res) => [
-    res.send("Te edite Putoooo")
-]);
+router.put('/work/', updateWork);
 
 module.exports = router;
