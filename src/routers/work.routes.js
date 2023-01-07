@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { getAllWork, getWork, createWork, deleteWork, updateWork } = require('../controllers/work.controller.js');
-//const pool = require('../config');
+//const pool = require('../db');
 
 const router = Router();
 
