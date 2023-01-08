@@ -9,7 +9,7 @@ router.get('/work/:id', getWork);
 
 router.post('/work/', createWork);
 
-router.delete('/work/:id', deleteWork);
+router.put('/work/delete/:id', deleteWork);
 
 router.put('/work/:id', updateWork);
 
