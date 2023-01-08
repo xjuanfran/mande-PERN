@@ -1,4 +1,5 @@
+#Ignore module files
 node_modules
+#ignore .env files
+.ENV
 
-# envoriment variables
-.env
