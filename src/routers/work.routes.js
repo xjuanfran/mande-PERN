@@ -1,17 +1,16 @@
 const { Router } = require('express');
 const { getAllWork, getWork, createWork, deleteWork, updateWork } = require('../controllers/work.controller.js');
-//const pool = require('../db');
 
 const router = Router();
 
 router.get('/work', getAllWork);
 
-router.get('/work/1', getWork);
+router.get('/work/:id', getWork);
 
 router.post('/work/', createWork);
 
-router.delete('/work/', deleteWork);
+router.delete('/work/:id', deleteWork);
 
-router.put('/work/', updateWork);
+router.put('/work/:id', updateWork);
 
 module.exports = router;
