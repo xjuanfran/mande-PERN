@@ -9,7 +9,7 @@ router.get('/person/:id', getPerson);
 
 router.post('/person', createPerson);
 
-router.delete('/person/:id', deletePerson);
+router.put('/person/delete/:id', deletePerson);
 
 router.put('/person/:id', updatePerson);
 
