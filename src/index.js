@@ -20,5 +20,11 @@ app.use((err, req, res, next) => {
   })
 });
 
+app.use((err, req, res, next) => {
+    return res.json({
+        message: err.message
+    })
+});
+
 app.listen(4000);
 console.log("My server on port 4000");
