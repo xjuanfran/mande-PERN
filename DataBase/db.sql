@@ -8,6 +8,11 @@ create table person (
     phone varchar(10)
 );
 
+ALTER TABLE public.person ALTER COLUMN email SET NOT NULL;
+ALTER TABLE person ADD CONSTRAINT unique_email UNIQUE (email);
+ALTER TABLE person ALTER COLUMN phone SET NOT NULL;
+ALTER TABLE person ADD CONSTRAINT unique_phone UNIQUE (phone);
+
 CREATE TABLE address (
     address_id SERIAL PRIMARY KEY,
     latitude FLOAT,
@@ -43,7 +48,7 @@ CREATE TABLE employee (
     photo_ID VARCHAR(500),
     profile_picture VARCHAR(500),
     status VARCHAR(2),
-    cash INT
+    cash INT,
     CONSTRAINT fk_employee_person
     FOREIGN KEY (employee_id) 
     REFERENCES person(person_id)

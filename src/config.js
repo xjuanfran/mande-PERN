@@ -10,4 +10,3 @@ const configdb = {
 };
 
 module.exports = { configdb };
-
