@@ -25,6 +25,21 @@ const getAddress = async (req, res, next) => {
   }
 }
 
+// const getAddress = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const result = await pool.query("SELECT * FROM address WHERE person_id = $1 AND status = 'Y'", [id])
+
+//     if (result.rows.length === 0) {
+//       return res.status(404).json({ message: 'Address not found' });
+//     }
+
+//     res.json(result.rows);
+//   } catch (error) {
+//     next(error);
+//   }
+// }
+
 const createAddress = async (req, res, next) => {
   const { latitude, longitude, person_id } = req.body;
 
@@ -58,7 +73,7 @@ const updateAddress = async (req, res, next) => {
     const { latitude, longitude, person_id } = req.body;
 
     const result = await pool.query(
-      'UPDATE person SET latitude = $1, longitude = $2, person_id = $3 WHERE address_id = $5 RETURNING *', [latitude, longitude, person_id, id]
+      'UPDATE address SET latitude = $1, longitude = $2, person_id = $3 WHERE address_id = $4 RETURNING *', [latitude, longitude, person_id, id]
     );
 
     if (result.rows.length === 0) {

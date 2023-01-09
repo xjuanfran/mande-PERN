@@ -28,7 +28,7 @@ const createPayMethod = async (req, res, next) => {
   const { cvv, card_number, card_type, expiration_date, user_id } = req.body;
 
   try {
-    const result = await pool.query("INSERT INTO payment_method ( cvv, card_number, card_type, expiration_date, user_id, status) VALUES ($1, $2, $3, $4, $5,'Y') RETURNING *", [cvv, card_number, card_type, expiration_date, user_id]);
+    const result = await pool.query("INSERT INTO payment_method (cvv, card_number, card_type, expiration_date, user_id, status) VALUES ($1, $2, $3, $4, $5,'Y') RETURNING *", [cvv, card_number, card_type, expiration_date, user_id]);
 
     res.json(result.rows[0]);
   } catch (error) {

@@ -9,6 +9,6 @@ router.get('/employeesWork/:emp_id/:w_id', getEmployeesWork);
 
 router.post('/employeesWork', createEmployeesWork);
 
-router.put('/employeesWork/:employee_id/:work_id', updateEmployeesWork);
+router.put('/employeesWork/:emp_id/:w_id', updateEmployeesWork);
 
 module.exports = router;
