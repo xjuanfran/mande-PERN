@@ -6,6 +6,11 @@ const workRouter = require('./routers/work.routes');
 const personRouter = require('./routers/person.routes');
 const serviceRouter = require('./routers/service.routes');
 const employeeRouter = require('./routers/employee.routes');
+const addressRouter = require('./routers/address.routes');
+const usersRouter = require('./routers/user.routes');
+const payMRouter = require('./routers/payM.routes');
+const reviewsRouter = require('./routers/reviews.routes');
+const employeesWorkRouter = require('./routers/employeesWork.routes');
 
 const app = express();
 
@@ -17,6 +22,11 @@ app.use(workRouter);
 app.use(personRouter);
 app.use(serviceRouter);
 app.use(employeeRouter);
+app.use(addressRouter);
+app.use(usersRouter);
+app.use(payMRouter);
+app.use(reviewsRouter);
+app.use(employeesWorkRouter);
 
 app.use((err, req, res, next) => {
   return res.json({
@@ -24,5 +34,5 @@ app.use((err, req, res, next) => {
   })
 });
 
-app.listen(process.env.PORT || 4000);
+app.listen(4000);
 console.log("My server on port 4000");
