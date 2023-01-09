@@ -1,16 +1,16 @@
 const {Router} = require('express');
-const {} = require('../controllers/address.controller.js');
+const {getAllPayMethod, getPayMethod, createPayMethod, deletePayMethod, updatePayMethod} = require('../controllers/payM.controller.js');
 
 const router = Router();
 
-router.get('/address', getAllAddress);
+router.get('/PayMethod', getAllPayMethod);
 
-router.get('/address/:id', getAddress);
+router.get('/PayMethod/:id', getPayMethod);
 
-router.post('/address', createAddress);
+router.post('/PayMethod', createPayMethod);
 
-router.put('/address/delete/:id', deleteAddress);
+router.put('/PayMethod/delete/:id', deletePayMethod);
 
-router.put('/address/:id', updateAddress);
+router.put('/PayMethod/:id', updatePayMethod);
 
 module.exports = router;
