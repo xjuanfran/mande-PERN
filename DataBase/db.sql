@@ -2,30 +2,28 @@ create database mande;
 
 create table person (
     person_id serial primary key,
-    first_name varchar(100),
-    last_name varchar(100),
-    email varchar(100),
-    phone varchar(10)
+    first_name varchar(100) NOT NULL,
+    last_name varchar(100) NOT NULL,
+    email varchar(100) NOT NULL UNIQUE,
+    phone varchar(10) NOT NULL UNIQUE,
+    status varchar(2)
 );
-
-ALTER TABLE public.person ALTER COLUMN email SET NOT NULL;
-ALTER TABLE person ADD CONSTRAINT unique_email UNIQUE (email);
-ALTER TABLE person ALTER COLUMN phone SET NOT NULL;
-ALTER TABLE person ADD CONSTRAINT unique_phone UNIQUE (phone);
 
 CREATE TABLE address (
     address_id SERIAL PRIMARY KEY,
-    latitude FLOAT,
-    longitude FLOAT,
+    latitude FLOAT NOT NULL,
+    longitude FLOAT NOT NULL,
     person_id INT,
+    status VARCHAR(2),
     CONSTRAINT fk_addres_person
     FOREIGN KEY (person_id) 
     REFERENCES person(person_id)
 );
 
 CREATE TABLE users (
-    user_id SERIAL PRIMARY KEY,
-    utility_bill VARCHAR(500),
+    user_id INT PRIMARY KEY,
+    utility_bill VARCHAR(500) NOT NULL,
+    status VARCHAR(2),
     CONSTRAINT fk_users_person
     FOREIGN KEY (user_id) 
     REFERENCES person(person_id)
@@ -33,22 +31,24 @@ CREATE TABLE users (
 
 CREATE TABLE payment_method (
     payment_id SERIAL PRIMARY KEY,
-    cvv VARCHAR(4),
-    card_number VARCHAR(20),
-    card_type VARCHAR(10),
-    expiration_date DATE DEFAULT CURRENT_DATE,
+    cvv VARCHAR(4) NOT NULL,
+    card_number VARCHAR(20) NOT NULL,
+    card_type VARCHAR(10) NOT NULL,
+    expiration_date DATE DEFAULT CURRENT_DATE NOT NULL,
     user_id int,
+    status VARCHAR(2),
     CONSTRAINT fk_paymentmethod_user
     FOREIGN KEY (user_id) 
     REFERENCES users(user_id)
 );
 
 CREATE TABLE employee (
-    employee_id SERIAL PRIMARY KEY,
-    photo_ID VARCHAR(500),
-    profile_picture VARCHAR(500),
-    status VARCHAR(2),
+    employee_id INT PRIMARY KEY,
+    photo_ID VARCHAR(500) NOT NULL,
+    profile_picture VARCHAR(500) NOT NULL,
     cash INT,
+    available VARCHAR(2),
+    status VARCHAR(2),
     CONSTRAINT fk_employee_person
     FOREIGN KEY (employee_id) 
     REFERENCES person(person_id)
@@ -66,13 +66,14 @@ CREATE TABLE reviews (
 
 CREATE TABLE works (
     work_id SERIAL PRIMARY KEY,
-    names VARCHAR(100)
+    names VARCHAR(100) NOT NULL,
+    status VARCHAR(2)
 );
 
 CREATE TABLE employees_work (
-    employee_id SERIAL,
-    work_id SERIAL,
-    price_hour INT,
+    employee_id INT,
+    work_id INT,
+    price_hour INT NOT NULL,
     CONSTRAINT pk_employees_work
     PRIMARY KEY (employee_id, work_id),
     CONSTRAINT pk_employeeswork_work
@@ -85,13 +86,12 @@ CREATE TABLE employees_work (
 
 CREATE TABLE pay (
     pay_id SERIAL PRIMARY KEY,
-    employee_pay INT,
-    profit_mande INT,
-    total_payment INT,
+    employee_pay INT NOT NULL,
+    profit_mande INT NOT NULL,
+    total_payment INT NOT NULL,
     pay_date DATE DEFAULT CURRENT_DATE,
-    service_id INT
+    status VARCHAR(2)
 );
-
 
 CREATE TABLE service (
     service_id SERIAL PRIMARY KEY,
@@ -100,6 +100,7 @@ CREATE TABLE service (
     user_id INT,
     employee_id INT,
     pay_id INT,
+    status VARCHAR(2),
     CONSTRAINT fk_service_employee
     FOREIGN KEY (employee_id) 
     REFERENCES employee(employee_id),
@@ -111,22 +112,9 @@ CREATE TABLE service (
     REFERENCES pay(pay_id)
 );
 
-ALTER TABLE works ALTER COLUMN names SET NOT NULL;
-
-ALTER TABLE EMPLOYEE RENAME COLUMN status to available;
-
-ALTER TABLE PAYMENT_METHOD ADD COLUMN status VARCHAR(2);
-
-ALTER TABLE USERS ADD COLUMN status VARCHAR(2);
-
-ALTER TABLE SERVICE ADD COLUMN status VARCHAR(2);
-
-ALTER TABLE PERSON ADD COLUMN status VARCHAR(2);
-
-ALTER TABLE ADDRESS  ADD COLUMN status VARCHAR(2);
-
-ALTER TABLE PAY ADD COLUMN status VARCHAR(2);
-
-ALTER TABLE EMPLOYEE ADD COLUMN status VARCHAR(2);
-
-ALTER TABLE WORKS ADD COLUMN status VARCHAR(2);
+INSERT INTO public.works (names,status) VALUES
+	 ('Plomero','Y'),
+	 ('Piloto','N'),
+	 ('Electricista','Y'),
+	 ('Programador','Y'),
+	 ('Piloto','Y');
