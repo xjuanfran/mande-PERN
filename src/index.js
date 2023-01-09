@@ -4,6 +4,8 @@ const cors = require('cors');
 
 const workRouter = require('./routers/work.routes');
 const personRouter = require('./routers/person.routes');
+const serviceRouter = require('./routers/service.routes');
+const employeeRouter = require('./routers/employee.routes');
 const addressRouter = require('./routers/address.routes');
 const usersRouter = require('./routers/user.routes');
 const payMRouter = require('./routers/payM.routes');
@@ -19,6 +21,8 @@ app.use(express.json());
 
 app.use(workRouter);
 app.use(personRouter);
+app.use(serviceRouter);
+app.use(employeeRouter);
 app.use(addressRouter);
 app.use(usersRouter);
 app.use(payMRouter);

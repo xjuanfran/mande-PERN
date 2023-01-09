@@ -31,10 +31,10 @@ CREATE TABLE users (
 
 CREATE TABLE payment_method (
     payment_id SERIAL PRIMARY KEY,
-    cvv VARCHAR(4),
-    card_number VARCHAR(20),
-    card_type VARCHAR(10),
-    expiration_date DATE DEFAULT CURRENT_DATE,
+    cvv VARCHAR(4) NOT NULL,
+    card_number VARCHAR(20) NOT NULL,
+    card_type VARCHAR(10) NOT NULL,
+    expiration_date DATE DEFAULT CURRENT_DATE NOT NULL,
     user_id int,
     status VARCHAR(2),
     CONSTRAINT fk_paymentmethod_user
@@ -44,9 +44,10 @@ CREATE TABLE payment_method (
 
 CREATE TABLE employee (
     employee_id INT PRIMARY KEY,
-    photo_ID VARCHAR(500),
-    profile_picture VARCHAR(500),
+    photo_ID VARCHAR(500) NOT NULL,
+    profile_picture VARCHAR(500) NOT NULL,
     cash INT,
+    available VARCHAR(2),
     status VARCHAR(2),
     CONSTRAINT fk_employee_person
     FOREIGN KEY (employee_id) 
@@ -65,14 +66,14 @@ CREATE TABLE reviews (
 
 CREATE TABLE works (
     work_id SERIAL PRIMARY KEY,
-    names VARCHAR(100),
+    names VARCHAR(100) NOT NULL,
     status VARCHAR(2)
 );
 
 CREATE TABLE employees_work (
     employee_id INT,
     work_id INT,
-    price_hour INT,
+    price_hour INT NOT NULL,
     CONSTRAINT pk_employees_work
     PRIMARY KEY (employee_id, work_id),
     CONSTRAINT pk_employeeswork_work
@@ -85,13 +86,11 @@ CREATE TABLE employees_work (
 
 CREATE TABLE pay (
     pay_id SERIAL PRIMARY KEY,
-    employee_pay INT,
-    profit_mande INT,
-    total_payment INT,
+    employee_pay INT NOT NULL,
+    profit_mande INT NOT NULL,
+    total_payment INT NOT NULL,
     pay_date DATE DEFAULT CURRENT_DATE,
-    service_id INT,
-    status VARCHAR(2),
-
+    status VARCHAR(2)
 );
 
 CREATE TABLE service (
@@ -113,6 +112,12 @@ CREATE TABLE service (
     REFERENCES pay(pay_id)
 );
 
+INSERT INTO public.works (names,status) VALUES
+	 ('Plomero','Y'),
+	 ('Piloto','N'),
+	 ('Electricista','Y'),
+	 ('Programador','Y'),
+	 ('Piloto','Y');
 
-agregar not null names works
-agregar campos available a employee
+
+ALTER TABLE reviews ADD CONSTRAINT employee_unique UNIQUE (employee_id);
