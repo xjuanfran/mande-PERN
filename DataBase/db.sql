@@ -130,3 +130,15 @@ ALTER TABLE PAY ADD COLUMN status VARCHAR(2);
 ALTER TABLE EMPLOYEE ADD COLUMN status VARCHAR(2);
 
 ALTER TABLE WORKS ADD COLUMN status VARCHAR(2);
+
+--changes
+
+ALTER TABLE users DROP CONSTRAINT fk_users_person;
+
+ALTER TABLE payment_method DROP CONSTRAINT fk_paymentmethod_user;
+
+ALTER TABLE payment_method ADD CONSTRAINT fk_paymentmethod_user FOREIGN KEY (user_id) REFERENCES users(user_id);
+
+ALTER TABLE service DROP CONSTRAINT fk_service_users;
+
+ALTER TABLE service ADD CONSTRAINT fk_service_users FOREIGN KEY (user_id) REFERENCES users(user_id);
