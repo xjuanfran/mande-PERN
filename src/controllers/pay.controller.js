@@ -3,7 +3,7 @@ const pool = require('../db');
 const getAllPay = async (req, res, next) => {
 
   try {
-    const result = await pool.query("SELECT * FROM pay WHERE status = 'Y'");
+    const result = await pool.query("SELECT * FROM pay");
     res.json(result.rows)
   } catch (error) {
     next(error);
@@ -29,8 +29,7 @@ const createPay = async (req, res, next) => {
   const { employee_pay, profit_mande, total_payment, pay_date, service_id } = req.body;
 
   try {
-    const result = await pool.query("INSERT INTO pay ( employee_pay, profit_mande, total_payment, pay_date, service_id, status) VALUES ($1, $2, $3, $4, $5, 'Y') RETURNING *", [employee_pay, profit_mande, total_payment, pay_date, service_id]);
-
+    const result = await pool.query("INSERT INTO pay ( employee_pay, profit_mande, total_payment, pay_date, status, service_id) VALUES ($1, $2, $3, $4, 'N', $5) RETURNING *", [employee_pay, profit_mande, total_payment, pay_date, service_id]);
     res.json(result.rows[0]);
   } catch (error) {
     next(error);
