@@ -89,7 +89,7 @@ CREATE TABLE pay (
     employee_pay INT NOT NULL,
     profit_mande INT NOT NULL,
     total_payment INT NOT NULL,
-    service_id INT,
+    service_id INT UNIQUE,
     pay_date DATE DEFAULT CURRENT_DATE,
     status VARCHAR(2),
     CONSTRAINT fk_pay_service
