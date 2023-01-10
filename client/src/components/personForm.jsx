@@ -7,8 +7,9 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Grid from '@mui/material/Grid';
-import { Card, CardContent, TextField, Typography } from '@mui/material';
+import { Card, CardContent, TextField, Typography, Button } from '@mui/material';
 import { Helmet, HelmetProvider } from 'react-helmet-async'
+import { useState } from 'react';
 
 
 export default function InputAdornments() {
@@ -19,6 +20,34 @@ export default function InputAdornments() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(person, address);
+  }
+
+  const [person, setPerson] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    password: ''
+  })
+
+  const handleChangePerson = (e) => {
+    //console.log(e.target.name, e.target.value);
+    setPerson({...person, [e.target.name]: e.target.value})
+  }
+
+  const [address, setAddress] = useState({
+    latitude: '',
+    longitude: ''
+  })
+
+  const handleChangeAddress = (e) => {
+    //console.log(e.target.name, e.target.value);
+    setAddress({ ...address, [e.target.name]: e.target.value })
+  }
 
   return (
     <HelmetProvider>
@@ -34,12 +63,16 @@ export default function InputAdornments() {
         <Grid item xs={3}>
           <Card
             sx={{ mt: 5 }}
+            style={{
+              backgroundColor: "#f7f6f6",
+              padding: "1rem"
+            }}
           >
             <Typography>
               Registrate
             </Typography>
             <CardContent>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <TextField
                   variant='outlined'
                   label='Nombre completo'
@@ -47,6 +80,9 @@ export default function InputAdornments() {
                     display: "block",
                     margin: ".5rem 0"
                   }}
+                  name='first_name'
+                  onChange={handleChangePerson}
+                  InputLabelProps={{ style: { color: 'black' } }}
                 />
                 <TextField
                   variant='outlined'
@@ -55,14 +91,9 @@ export default function InputAdornments() {
                     display: "block",
                     margin: ".5rem 0"
                   }}
-                />
-                <TextField
-                  variant='outlined'
-                  label='Telefono/celular'
-                  sx={{
-                    display: "block",
-                    margin: ".5rem 0"
-                  }}
+                  name='last_name'
+                  onChange={handleChangePerson}
+                  InputLabelProps={{ style: { color: 'black' } }}
                 />
                 <TextField
                   variant='outlined'
@@ -71,6 +102,20 @@ export default function InputAdornments() {
                     display: "block",
                     margin: ".5rem 0"
                   }}
+                  name='email'
+                  onChange={handleChangePerson}
+                  InputLabelProps={{ style: { color: 'black' } }}
+                />
+                <TextField
+                  variant='outlined'
+                  label='Telefono/celular'
+                  sx={{
+                    display: "block",
+                    margin: ".5rem 0"
+                  }}
+                  name='phone'
+                  onChange={handleChangePerson}
+                  InputLabelProps={{ style: { color: 'black' } }}
                 />
                 <TextField
                   variant='outlined'
@@ -79,6 +124,9 @@ export default function InputAdornments() {
                     display: "block",
                     margin: ".5rem 0"
                   }}
+                  name='latitude'
+                  onChange={handleChangeAddress}
+                  InputLabelProps={{ style: { color: 'black' } }}
                 />
                 <TextField
                   variant='outlined'
@@ -87,10 +135,15 @@ export default function InputAdornments() {
                     display: "block",
                     margin: ".5rem 0"
                   }}
+                  name='longitude'
+                  onChange={handleChangeAddress}
+                  InputLabelProps={{ style: { color: 'black' } }}
                 />
                 <FormControl sx={{ width: '26ch' }} variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                   <OutlinedInput
+                    name='password'
+                    onChange={handleChangePerson}
                     id="outlined-adornment-password"
                     type={showPassword ? 'text' : 'password'}
                     endAdornment={
@@ -108,6 +161,17 @@ export default function InputAdornments() {
                     label="Password"
                   />
                 </FormControl>
+                <Button
+                  variant='contained'
+                  color='primary'
+                  type='submit'
+                  sx={{
+                    display: "block",
+                    margin: ".5rem 0"
+                  }}
+                >
+                  Siguiente
+                </Button>
               </form>
             </CardContent>
           </Card>
