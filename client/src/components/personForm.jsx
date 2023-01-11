@@ -10,9 +10,16 @@ import Grid from '@mui/material/Grid';
 import { Card, CardContent, TextField, Typography, Button } from '@mui/material';
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useState } from 'react';
+import Autocomplete from '@mui/material/Autocomplete';
 
+
+const kindPerson = [
+  { label: 'Cliente' },
+  { label: 'Empleado' }
+];
 
 export default function InputAdornments() {
+
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -36,7 +43,7 @@ export default function InputAdornments() {
 
   const handleChangePerson = (e) => {
     //console.log(e.target.name, e.target.value);
-    setPerson({...person, [e.target.name]: e.target.value})
+    setPerson({ ...person, [e.target.name]: e.target.value })
   }
 
   const [address, setAddress] = useState({
@@ -62,13 +69,18 @@ export default function InputAdornments() {
       >
         <Grid item xs={3}>
           <Card
-            sx={{ mt: 5 }}
+            sx={{ mt: 5, borderRadius: ".5rem" }}
             style={{
               backgroundColor: "#f7f6f6",
               padding: "1rem"
             }}
           >
-            <Typography>
+            <Typography
+              variant='h5'
+              style={{
+                textAlign: "center",
+              }}
+            >
               Registrate
             </Typography>
             <CardContent>
@@ -139,6 +151,16 @@ export default function InputAdornments() {
                   onChange={handleChangeAddress}
                   InputLabelProps={{ style: { color: 'black' } }}
                 />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={kindPerson}
+                  sx={{
+                    display: "block",
+                    margin: ".5rem 0"
+                  }}
+                  renderInput={(params) => <TextField {...params} label="Seleccione un tipo" />}
+                />
                 <FormControl sx={{ width: '26ch' }} variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                   <OutlinedInput
@@ -168,6 +190,13 @@ export default function InputAdornments() {
                   sx={{
                     display: "block",
                     margin: ".5rem 0"
+                  }}
+                  style={{
+                    backgroundColor: "#0a0a23",
+                    color: "white",
+                    width: "50%",
+                    margin: "0 auto",
+                    marginTop: "1rem"
                   }}
                 >
                   Siguiente
