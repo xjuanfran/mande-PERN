@@ -5,6 +5,7 @@ import PersonForm from './components/PersonForm'
 import Navbar from './components/Navbar'
 import {Container} from '@mui/material'
 import ClientForm from './components/ClientForm'
+import EmployeeForm from './components/EmployeeForm'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/person" element={<PersonList />} />
         <Route path="/person/new" element={<PersonForm />} />
         <Route path="/client/new" element={<ClientForm />} />
+        <Route path="/employee/new" element={<EmployeeForm />} />
         {/*mising route edit person*/}
         {/*mising route edit client*/}
       </Routes>

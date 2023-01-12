@@ -80,7 +80,7 @@ export default function ClientForm() {
   return (
     <HelmetProvider>
       <Helmet>
-        <style>{'body { background-color: #0a0a23; }'}</style>
+        <style>{'body { background-color: #003748; }'}</style>
       </Helmet>
       <Grid
         container
@@ -164,7 +164,7 @@ export default function ClientForm() {
                   sx={{
                     display: "block",
                     width: '14rem',
-                    margin: ".5rem 0"
+                    margin: "1rem 0"
                   }}
                   variant="outlined">
                   <InputLabel
