@@ -6,7 +6,8 @@ create table person (
     last_name varchar(100) NOT NULL,
     email varchar(100) NOT NULL UNIQUE,
     phone varchar(10) NOT NULL UNIQUE,
-    status varchar(2)
+    status varchar(2),
+    password varchar(50) NOT NULL
 );
 
 CREATE TABLE address (
@@ -74,6 +75,7 @@ CREATE TABLE employees_work (
     employee_id INT,
     work_id INT,
     price_hour INT NOT NULL,
+    status VARCHAR(2),
     CONSTRAINT pk_employees_work
     PRIMARY KEY (employee_id, work_id),
     CONSTRAINT pk_employeeswork_work

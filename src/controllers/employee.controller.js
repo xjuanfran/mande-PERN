@@ -1,5 +1,6 @@
 const pool = require('../db');
 
+//Devuelve todos los registros de employees en estado Y
 const getAllemployee = async (req, res, next) => {
     try {
         const result = await pool.query("SELECT * FROM employee WHERE status = 'Y'");
@@ -10,6 +11,7 @@ const getAllemployee = async (req, res, next) => {
     }
 };
 
+//Devuelve un registro especifico de employee en estado Y
 const getemployee = async (req, res, next) => {
     const { id } = req.params;
     try {
@@ -24,6 +26,27 @@ const getemployee = async (req, res, next) => {
     }
 }
 
+//devuelve todos los trabajos que tiene un employee en estado Y
+const getAllMyWorks = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query("SELECT W.work_id, W.names, EW.price_hour " +
+        "FROM works W INNER JOIN employees_work EW " +
+        "ON W.work_id = EW.work_id " +
+        "INNER JOIN employee E " +
+        "ON E.employee_id = EW.employee_id " +
+        "WHERE W.status = 'Y' and E.employee_id = 1", [id]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'No existe el empleado' })
+        }
+        res.json(result.rows);
+    }
+    catch (error) {
+        next(error);
+    }
+}
+
+//crea un registro de employee
 const createemployee = async (req, res, next) => {
     const { employee_id, photo_id, profile_picture, cash } = req.body;
 
@@ -37,6 +60,7 @@ const createemployee = async (req, res, next) => {
 
 }
 
+//Inactiva un registro de employee poniendo su status en N
 const deleteemployee = async (req, res, next) => {
     const { id } = req.params;
     try{
@@ -51,6 +75,7 @@ const deleteemployee = async (req, res, next) => {
     }
 }
 
+//Actualiza un registro de employee
 const updateemployee = async (req, res, next) => {
     const { id } = req.params;
     const { photo_id, profile_picture, available, cash } = req.body;
@@ -69,6 +94,7 @@ const updateemployee = async (req, res, next) => {
 module.exports = {
     getAllemployee,
     getemployee,
+    getAllMyWorks,
     createemployee,
     deleteemployee,
     updateemployee
