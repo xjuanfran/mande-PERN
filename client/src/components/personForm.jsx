@@ -161,8 +161,13 @@ export default function InputAdornments() {
                   }}
                   renderInput={(params) => <TextField {...params} label="Seleccione un tipo" />}
                 />
-                <FormControl sx={{ width: '26ch' }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                <FormControl
+                  sx={{ width: '26ch' }}
+                  variant="outlined"
+                >
+                  <InputLabel htmlFor="outlined-adornment-password">
+                    Password
+                  </InputLabel>
                   <OutlinedInput
                     name='password'
                     onChange={handleChangePerson}
