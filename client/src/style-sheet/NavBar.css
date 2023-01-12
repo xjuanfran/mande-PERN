@@ -1,0 +1,78 @@
+h1 {
+    text-align: center;
+  }
+  
+  body {
+    background-color: #f5f6f7;
+  }
+  
+  .titleHome {
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    color: rgb(17, 4, 90);
+  }
+  
+  .navBarHome {
+    background-color: #0a0a23;
+  }
+  
+  .navbar-nameStore{
+    color: white;
+    text-decoration: none;
+    font-size: 2.0em;
+    font-family: Lato, Verdana, Geneva, Tahoma, sans-serif;
+  }
+  
+  .radioTogglerButton{
+    border-radius: 20%;
+  }
+  
+   .tamanoSignIn{
+    font-size: 1em;
+    text-indent: 50px;
+  }
+  
+  .buttonStyle{
+    background-color: #31038b;
+    color: white;
+    border-color: white;
+  }
+  
+  .placeHolderStyle{
+    width: 20em;
+  }
+  
+  .carritoLogo{
+    width: 1.8em;
+    height: 1.4em;
+    margin: -0.3em 0em 0em 8.4em;
+  }
+  
+  .carButton{
+    background-color:#31038b;
+    color: white;
+    border-color: white;
+    height: 2.4em;
+    width: 11.8em;
+    border: white 1px solid;
+    border-radius: 7px;
+  }
+  
+  .carritoLogoLetras{
+    width: 10em;
+    margin: -1.5em 2em 1em -1em;
+  }
+  
+  .itemCarButton{
+    padding: 0em 0em 0em 0em;
+  }
+  
+  .linkCar{
+    padding: 0em 0em 0em 0em;
+  }
+  
+.perfil{
+  left: 100px;
+  margin: 0;
+}
