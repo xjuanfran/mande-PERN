@@ -26,12 +26,40 @@ const getPerson = async (req, res, next) => {
 }
 
 const createPerson = async (req, res, next) => {
-  const { first_name, last_name, email, phone } = req.body;
+  const { first_name, last_name, email, phone, password } = req.body;
 
   try {
-    const result = await pool.query("INSERT INTO person (first_name, last_name, email, phone, status) VALUES ($1, $2, $3, $4, 'Y') RETURNING *", [first_name, last_name, email, phone]);
+    const result = await pool.query("INSERT INTO person (first_name, last_name, email, phone, status, password) VALUES ($1, $2, $3, $4, 'Y', $5) RETURNING *", [first_name, last_name, email, phone, password]);
 
     res.json(result.rows[0]);
+  } catch (error) {
+    next(error);
+  }
+}
+
+const personValidation = async (req, res, next) => {
+  const { email, phone } = req.body;
+
+  try {
+    const result = await pool.query("SELECT * FROM person WHERE email = $1 OR phone = $2", [email, phone]);
+
+    if (result.rows.length > 0) {
+      return res.json({ message: true });
+    }
+    res.json({ message: false });
+  } catch (error) {
+    next(error);
+  }
+}
+
+const loginPerson = async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    const result = await pool.query("SELECT person_id, email, password FROM person WHERE email = $1 AND password = $2 AND status = 'Y'", [email, password]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Person not found' });
+    }
+    res.json(result.rows[0].person_id);
   } catch (error) {
     next(error);
   }
@@ -56,16 +84,15 @@ const updatePerson = async (req, res, next) => {
 
   try {
     const { id } = req.params;
-    const { first_name, last_name, email, phone } = req.body;
+    const { first_name, last_name, email, phone, password } = req.body;
 
     const result = await pool.query(
-      'UPDATE person SET first_name = $1, last_name = $2, email = $3, phone = $4 WHERE person_id = $5 RETURNING *', [first_name, last_name, email, phone, id]
+      'UPDATE person SET first_name = $1, last_name = $2, email = $3, phone = $4, password = $5 WHERE person_id = $6 RETURNING *', [first_name, last_name, email, phone, password, id]
     );
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Person not found' });
     }
-    //console.log(result);
     res.json(result.rows[0]);
   } catch (error) {
     next(error);
@@ -74,8 +101,10 @@ const updatePerson = async (req, res, next) => {
 
 module.exports = {
   getAllPerson,
-  getPerson,
+  getPerson,  
   createPerson,
+  personValidation,
+  loginPerson,
   deletePerson,
   updatePerson
 }

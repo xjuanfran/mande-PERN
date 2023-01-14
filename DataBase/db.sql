@@ -6,7 +6,8 @@ create table person (
     last_name varchar(100) NOT NULL,
     email varchar(100) NOT NULL UNIQUE,
     phone varchar(10) NOT NULL UNIQUE,
-    status varchar(2)
+    status varchar(2),
+    password varchar(50) NOT NULL
 );
 
 CREATE TABLE address (
@@ -56,7 +57,7 @@ CREATE TABLE employee (
 
 CREATE TABLE reviews (
     reviews_id SERIAL PRIMARY KEY,
-    employee_id INT,
+    employee_id INT UNIQUE,
     total_jobs INT,
     rating FLOAT,
     CONSTRAINT fk_reviews_employee
@@ -74,6 +75,7 @@ CREATE TABLE employees_work (
     employee_id INT,
     work_id INT,
     price_hour INT NOT NULL,
+    status VARCHAR(2),
     CONSTRAINT pk_employees_work
     PRIMARY KEY (employee_id, work_id),
     CONSTRAINT pk_employeeswork_work
@@ -89,8 +91,12 @@ CREATE TABLE pay (
     employee_pay INT NOT NULL,
     profit_mande INT NOT NULL,
     total_payment INT NOT NULL,
+    service_id INT UNIQUE,
     pay_date DATE DEFAULT CURRENT_DATE,
-    status VARCHAR(2)
+    status VARCHAR(2),
+    CONSTRAINT fk_pay_service
+    FOREIGN KEY (service_id)
+    REFERENCES service(service_id)
 );
 
 CREATE TABLE service (
@@ -99,18 +105,15 @@ CREATE TABLE service (
     status_rating VARCHAR(2),
     user_id INT,
     employee_id INT,
-    pay_id INT,
     status VARCHAR(2),
     CONSTRAINT fk_service_employee
     FOREIGN KEY (employee_id) 
     REFERENCES employee(employee_id),
     CONSTRAINT fk_service_users
     FOREIGN KEY (user_id) 
-    REFERENCES users(user_id),
-    CONSTRAINT fk_service_pay
-    FOREIGN KEY (pay_id) 
-    REFERENCES pay(pay_id)
+    REFERENCES users(user_id)
 );
+
 
 INSERT INTO public.works (names,status) VALUES
 	 ('Plomero','Y'),
@@ -118,6 +121,3 @@ INSERT INTO public.works (names,status) VALUES
 	 ('Electricista','Y'),
 	 ('Programador','Y'),
 	 ('Piloto','Y');
-
-
-ALTER TABLE reviews ADD CONSTRAINT employee_unique UNIQUE (employee_id);
