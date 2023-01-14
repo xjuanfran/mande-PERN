@@ -36,6 +36,19 @@ const createPayMethod = async (req, res, next) => {
   }
 }
 
+const getPayMethodPerson = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query("SELECT * FROM payment_method WHERE user_id = $1 AND status = 'Y'", [id])
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Payment method not found' });
+    }
+    res.json(result.rows[0]);
+  } catch (error) {
+    next(error);
+  }
+}
+
 const deletePayMethod = async (req, res, next) => {
 
   const { id } = req.params;
@@ -74,6 +87,7 @@ const updatePayMethod = async (req, res, next) => {
 module.exports = {
   getAllPayMethod,
   getPayMethod,
+  getPayMethodPerson,
   createPayMethod,
   deletePayMethod,
   updatePayMethod

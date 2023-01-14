@@ -42,7 +42,6 @@ const getUserAddress = async (req, res, next) => {
   }
 }
 
-
 //crea un registro de address
 const createAddress = async (req, res, next) => {
   const { latitude, longitude, person_id } = req.body;
