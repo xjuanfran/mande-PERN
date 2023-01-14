@@ -28,9 +28,47 @@ export default function InputAdornments() {
     event.preventDefault();
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(person, address);
+    //Valida si el correo o el telefono ya existen donde en caso de que exista devuelve True y en caso de que no exista devuelve False
+    const dataValidation = await fetch('http://localhost:4000/person/validation', {
+      method: 'POST',
+      body: JSON.stringify(person),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const dataResultValidation = await dataValidation.json();
+    //Crea en base de los datos la persona y la direccion si la validacion es false
+    if (dataResultValidation.message === false) {
+      const data = await fetch('http://localhost:4000/person', {
+        method: 'POST',
+        body: JSON.stringify(person),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const dataResult = await data.json();
+      console.log(dataResult);
+      //Contruye el objeto completo para enviar a la tabla address
+      const completeAddress = {
+        person_id: dataResult.person_id,
+        latitude: address.latitude,
+        longitude: address.longitude
+      }
+      //Envia el objeto completo a la tabla address
+      const dataAddress = await fetch('http://localhost:4000/address', {
+        method: 'POST',
+        body: JSON.stringify(completeAddress),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const dataResultAddress = await dataAddress.json();
+      console.log(dataResultAddress);
+    } else {
+      console.log('El correo ya existe o el telefono ya existe');
+    }
   }
 
   const [person, setPerson] = useState({
