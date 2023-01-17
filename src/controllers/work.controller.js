@@ -10,6 +10,18 @@ const getAllWork = async (req, res, next) => {
     }
 };
 
+const getActiveWork = async (req, res, next) => {
+    try {
+        const result = await pool.query("SELECT * FROM works WHERE " +
+                "work_id IN (SELECT work_id FROM employees_work WHERE status = 'Y') " +
+                "AND status = 'Y'");
+        res.json(result.rows);
+    }
+    catch (error) {
+        next(error);
+    }
+};
+
 const getWork = async (req, res, next) => {
     const { id } = req.params;
     try {
@@ -67,6 +79,7 @@ const updateWork = async (req, res, next) => {
 
 module.exports = {
     getAllWork,
+    getActiveWork,
     getWork,
     createWork,
     deleteWork,

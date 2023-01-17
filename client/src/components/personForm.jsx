@@ -37,15 +37,9 @@ export default function InputAdornments() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //console.log(person)
+    //console.log(person);  
 
-    if(kindPerson.type_user.label === 'Cliente'){
-      navigate('/client/new')
-    }else if(kindPerson.type_user.label === 'Empleado'){
-      navigate('/employee/new')
-    }
-
-
+    let id = 0;
     //Valida si el correo o el telefono ya existen donde en caso de que exista devuelve True y en caso de que no exista devuelve False
     const dataValidation = await fetch('http://localhost:4000/person/validation', {
       method: 'POST',
@@ -66,6 +60,7 @@ export default function InputAdornments() {
       })
       const dataResult = await data.json();
       console.log(dataResult);
+      id = dataResult.person_id;
       //Contruye el objeto completo para enviar a la tabla address
       const completeAddress = {
         person_id: dataResult.person_id,
@@ -84,6 +79,12 @@ export default function InputAdornments() {
       console.log(dataResultAddress);
     } else {
       console.log('El correo ya existe o el telefono ya existe');
+    }
+
+    if(kindPerson.type_user.label === 'Cliente'){
+      navigate(`/client/${id}/new`)
+    }else if(kindPerson.type_user.label === 'Empleado'){
+      navigate('/employee/new')
     }
   }
 

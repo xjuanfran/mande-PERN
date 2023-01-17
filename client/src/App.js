@@ -16,7 +16,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/person" element={<PersonList />} />
         <Route path="/person/new" element={<PersonForm />} />
-        <Route path="/client/new" element={<ClientForm />} />
+        <Route path="/client/:id/new" element={<ClientForm />} />
         <Route path="/employee/new" element={<EmployeeForm />} />
         {/*mising route edit person*/}
         {/*mising route edit client*/}

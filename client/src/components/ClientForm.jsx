@@ -13,6 +13,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Grid, Card, Typography, CardContent, TextField, Button } from '@mui/material'
+import { useParams } from 'react-router-dom';
 
 
 //type of card, debit or credit
@@ -24,13 +25,41 @@ export default function ClientForm() {
   const [img, setImg] = useState(null);
 
   //on submit form
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user, payM);
+    const dataUser = await fetch('http://localhost:4000/user', {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const dataResultUser = await dataUser.json();
+    console.log(dataResultUser);
+
+    const dataValidation = await fetch(`http://localhost:4000/PayMethod/Validation/${payM.card_number}`);
+    const dataResultValidation = await dataValidation.json();
+
+    if (dataResultValidation.message === false) {
+      const dataPayM = await fetch('http://localhost:4000/PayMethod', {
+        method: 'POST',
+        body: JSON.stringify(payM),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const dataResultPayM = await dataPayM.json();
+      console.log(dataResultPayM);
+    } else {
+      console.log("El metodo de pago ya existe");
+    }
   }
+
+  const params = useParams();
 
   //state for user
   const [user, setUser] = useState({
+    user_id: params.id,
     utility_bill: ''
   })
 
@@ -45,8 +74,9 @@ export default function ClientForm() {
   const [payM, setPayM] = useState({
     cvv: '',
     card_number: '',
-    cardType: null,
-    expiration_date: ''
+    card_type: null,
+    expiration_date: '',
+    user_id: params.id
   })
 
   //handle change for payment method
@@ -109,7 +139,7 @@ export default function ClientForm() {
                   disablePortal
                   id="combo-box-demo"
                   options={cardOptions}
-                  onChange={(event, newValue) => { setPayM({ ...payM, cardType: newValue }) }}
+                  onChange={(event, newValue) => { setPayM({ ...payM, card_type: newValue }) }}
                   sx={{
                     display: "block",
                     margin: " -.5rem 0"
@@ -134,11 +164,11 @@ export default function ClientForm() {
                     Fecha de expiracion
                     <input
                       type="Date"
-                      name="Fecha de expiracion"
-                      style={{ 
-                        display: "block", 
-                        width: '14rem', 
-                        height: '3rem', 
+                      name="expiration_date"
+                      style={{
+                        display: "block",
+                        width: '14rem',
+                        height: '3rem',
                         margin: "1rem 0",
                         backgroundColor: "#f7f6f6",
                         border: "1px solid #003748",
