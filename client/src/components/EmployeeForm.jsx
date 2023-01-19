@@ -12,7 +12,7 @@ import { Autocomplete } from '@mui/material'
 // const employeeOptions = [fetch('http://localhost:4000/work')];
 
 export default function EmployeeForm() {
-  
+
   //to fill combobox type of works with data from database
   const [work, setWork] = useState([]);
 
@@ -20,11 +20,12 @@ export default function EmployeeForm() {
     const response = await fetch('http://localhost:4000/work');
     const data = await response.json();
     setWork(data);
+    //console.log(data);
   }
 
   useEffect(() => {
     loadWork();
-  }, [work])
+  }, [])
 
   //state for img
   const [img, setImg] = useState(null);
@@ -50,6 +51,7 @@ export default function EmployeeForm() {
   }
 
   const [works, setWorks] = useState({
+    work_id: '',
     names: '',
     description: ''
   })
@@ -70,7 +72,21 @@ export default function EmployeeForm() {
   //handle submit for employee
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(employee, works, employeeWork);
+    const response = await fetch('http://localhost:4000/work');
+    const dataCombo = await response.json();
+    //let workId = data.map((work) => work.work_id);
+    //console.log(workId);
+    ///console.log(works.names)
+    
+    for (let i = 0; i < dataCombo.length; i++) {
+      if (dataCombo[i].names === works.names) {
+        works.work_id = dataCombo[i].work_id;
+      }
+      if (works.names === null) {
+        setWorks({ ...works, work_id: '' })
+      }
+    }
+    console.log(works);
   }
 
   return (
@@ -132,19 +148,19 @@ export default function EmployeeForm() {
                   sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
                 >
                   <TextField
-                  variant="outlined"
-                  label="Descripcion trabajo"
-                  multiline
-                  rows={4}
-                  sx={{
-                    display: "block",
-                    margin: ".9rem 0",
-                  }}
-                  style={{ width: "93%" }}
-                  name="description"
-                  onChange={handleChangeWorks}
+                    variant="outlined"
+                    label="Descripcion trabajo"
+                    multiline
+                    rows={4}
+                    sx={{
+                      display: "block",
+                      margin: ".9rem 0",
+                    }}
+                    style={{ width: "93%" }}
+                    name="description"
+                    onChange={handleChangeWorks}
 
-                />
+                  />
                   <Stack
                     direction="row"
                     alignItems="center"
