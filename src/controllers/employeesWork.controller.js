@@ -59,10 +59,10 @@ const deleteEmployeesWork = async (req, res, next) => {
 const updateEmployeesWork = async (req, res, next) => {
   try {
     const { emp_id, w_id } = req.params;
-    const { employee_id, work_id, price_hour, description } = req.body;
+    const { price_hour, description } = req.body;
 
     const result = await pool.query(
-      'UPDATE employees_work SET employee_id = $1, work_id = $2, price_hour = $3, description = $4 WHERE employee_id = $5 AND work_id = $6 RETURNING *', [employee_id, work_id, price_hour, description, emp_id, w_id]
+      'UPDATE employees_work SET price_hour = $1, description = $2 WHERE employee_id = $3 AND work_id = $4 RETURNING *', [price_hour, description, emp_id, w_id]
     );
 
     if (result.rows.length === 0) {
