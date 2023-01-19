@@ -35,9 +35,9 @@ const getAllMyWorks = async (req, res, next) => {
         "ON W.work_id = EW.work_id " +
         "INNER JOIN employee E " +
         "ON E.employee_id = EW.employee_id " +
-        "WHERE W.status = 'Y' and E.employee_id = 1", [id]);
+        "WHERE W.status = 'Y' and EW.status = 'Y' and E.employee_id = $1", [id]);
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: 'No existe el empleado' })
+            return res.status(404).json({ message: 'Este trabajador aun no tiene profesiones' })
         }
         res.json(result.rows);
     }
