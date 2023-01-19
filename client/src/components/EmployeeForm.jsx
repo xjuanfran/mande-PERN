@@ -52,17 +52,15 @@ export default function EmployeeForm() {
 
   const [works, setWorks] = useState({
     work_id: '',
-    names: '',
-    description: ''
+    names: ''    
   })
 
-  //handle change for works
-  const handleChangeWorks = (e) => {
-    setWorks({ ...works, [e.target.name]: e.target.value })
-  }
 
   const [employeeWork, setEmployeeWork] = useState({
+    employee_id: '',
+    work_id: '',
     price_hour: '',
+    description: ''
   })
 
   const handleChangeEmployeeWork = (e) => {
@@ -80,13 +78,13 @@ export default function EmployeeForm() {
     
     for (let i = 0; i < dataCombo.length; i++) {
       if (dataCombo[i].names === works.names) {
-        works.work_id = dataCombo[i].work_id;
+        employeeWork.work_id = dataCombo[i].work_id;
       }
       if (works.names === null) {
         setWorks({ ...works, work_id: '' })
       }
     }
-    console.log(works);
+    console.log(employee, employeeWork);
   }
 
   return (
@@ -158,7 +156,7 @@ export default function EmployeeForm() {
                     }}
                     style={{ width: "93%" }}
                     name="description"
-                    onChange={handleChangeWorks}
+                    onChange={handleChangeEmployeeWork}
 
                   />
                   <Stack

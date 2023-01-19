@@ -28,10 +28,10 @@ const getEmployeesWork = async (req, res, next) => {
 
 //crea un registro de employeesWork
 const createEmployeesWork = async (req, res, next) => {
-  const { employee_id, work_id, price_hour } = req.body;
+  const { employee_id, work_id, price_hour, description } = req.body;
 
   try {
-    const result = await pool.query("INSERT INTO employees_work ( employee_id, work_id, price_hour, status) VALUES ($1, $2, $3, 'Y') RETURNING *", [employee_id, work_id, price_hour]);
+    const result = await pool.query("INSERT INTO employees_work ( employee_id, work_id, price_hour, status, description) VALUES ($1, $2, $3, 'Y', $4) RETURNING *", [employee_id, work_id, price_hour, description]);
 
     res.json(result.rows[0]);
   } catch (error) {
@@ -59,10 +59,10 @@ const deleteEmployeesWork = async (req, res, next) => {
 const updateEmployeesWork = async (req, res, next) => {
   try {
     const { emp_id, w_id } = req.params;
-    const { employee_id, work_id, price_hour } = req.body;
+    const { employee_id, work_id, price_hour, description } = req.body;
 
     const result = await pool.query(
-      'UPDATE employees_work SET employee_id = $1, work_id = $2, price_hour = $3 WHERE employee_id = $4 AND work_id = $5 RETURNING *', [employee_id, work_id, price_hour, emp_id, w_id]
+      'UPDATE employees_work SET employee_id = $1, work_id = $2, price_hour = $3, description = $4 WHERE employee_id = $5 AND work_id = $6 RETURNING *', [employee_id, work_id, price_hour, description, emp_id, w_id]
     );
 
     if (result.rows.length === 0) {
