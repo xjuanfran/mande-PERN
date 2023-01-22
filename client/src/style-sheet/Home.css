@@ -1,0 +1,37 @@
+.mainHome {
+    background-image: url("../images/fondoLogin.png");
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
+.about {
+    background-image: url("../images/fondoLogin.png");
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 10%;
+}
+
+.titleHome {
+    font-size: 50px;
+    font-weight: bold;
+    color: #460e56;
+    text-align: center;
+    padding-top: 8%;
+}
+
+.textAbout{
+    font-size: 170%;
+    font-family: sans-serif;
+    color: #232323;
+    text-align: justify;
+    padding-top: 10%;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.buttons{
+    text-align: center;
+    padding-top: 5%;
+}
