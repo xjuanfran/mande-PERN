@@ -134,6 +134,7 @@ export default function InputAdornments() {
               variant='h5'
               style={{
                 textAlign: "center",
+                marginBottom: "-2.7rem"
               }}
             >
               Registrate
