@@ -11,6 +11,22 @@ const getAllemployee = async (req, res, next) => {
     }
 };
 
+//devuelve todos los empleados que tiene un trabajo en estado Y
+const getAllWorkEmployee = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query("SELECT * FROM employee WHERE employee_id IN " +
+                "(SELECT employee_id FROM employees_work WHERE work_id = $1)", [id]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Este trabajo aun no tiene empleados' })
+        }
+        res.json(result.rows);
+    }
+    catch (error) {
+        next(error);
+    }
+}
+
 //Devuelve un registro especifico de employee en estado Y
 const getemployee = async (req, res, next) => {
     const { id } = req.params;
@@ -26,32 +42,12 @@ const getemployee = async (req, res, next) => {
     }
 }
 
-//devuelve todos los trabajos que tiene un employee en estado Y
-const getAllMyWorks = async (req, res, next) => {
-    const { id } = req.params;
-    try {
-        const result = await pool.query("SELECT W.work_id, W.names, EW.price_hour " +
-        "FROM works W INNER JOIN employees_work EW " +
-        "ON W.work_id = EW.work_id " +
-        "INNER JOIN employee E " +
-        "ON E.employee_id = EW.employee_id " +
-        "WHERE W.status = 'Y' and EW.status = 'Y' and E.employee_id = $1", [id]);
-        if (result.rows.length === 0) {
-            return res.status(404).json({ message: 'Este trabajador aun no tiene profesiones' })
-        }
-        res.json(result.rows);
-    }
-    catch (error) {
-        next(error);
-    }
-}
-
 //crea un registro de employee
 const createemployee = async (req, res, next) => {
-    const { employee_id, photo_id, profile_picture, cash } = req.body;
+    const { employee_id, photo_id, profile_picture } = req.body;
 
     try {
-        const result = await pool.query("INSERT INTO employee (employee_id, photo_id, profile_picture, available, cash, status) VALUES ($1, $2, $3, 'Y', $4, 'Y') RETURNING *", [employee_id, photo_id, profile_picture, cash]);
+        const result = await pool.query("INSERT INTO employee (employee_id, photo_id, profile_picture, available, cash, status) VALUES ($1, $2, $3, 'Y', 0, 'Y') RETURNING *", [employee_id, photo_id, profile_picture]);
         res.json(result.rows[0]);
     }
     catch (error) {
@@ -93,8 +89,8 @@ const updateemployee = async (req, res, next) => {
 
 module.exports = {
     getAllemployee,
-    getemployee,
-    getAllMyWorks,
+    getAllWorkEmployee,
+    getemployee,    
     createemployee,
     deleteemployee,
     updateemployee

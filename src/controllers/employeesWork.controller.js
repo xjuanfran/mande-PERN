@@ -55,6 +55,22 @@ const deleteEmployeesWork = async (req, res, next) => {
   }
 }
 
+//Activa un registro de employeesWork poniendo su status en Y
+const activeEmployeesWork = async (req, res, next) => {
+  try {
+    const { emp_id, w_id } = req.params;
+
+    const result = await pool.query("UPDATE employees_work SET status = 'Y' WHERE employee_id = $1 AND work_id = $2 RETURNING *", [emp_id, w_id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'El trabajador nunca a tenido este trabajo' });
+    }
+    res.json(result.rows[0]);
+  } catch (error) {
+    next(error);
+  }
+}
+
 //Actualiza un registro de employeesWork
 const updateEmployeesWork = async (req, res, next) => {
   try {
@@ -79,5 +95,6 @@ module.exports = {
   getEmployeesWork,
   createEmployeesWork,
   deleteEmployeesWork,
+  activeEmployeesWork,
   updateEmployeesWork
 }
