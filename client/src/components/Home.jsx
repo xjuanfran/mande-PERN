@@ -71,7 +71,7 @@ export default function Home() {
         <h1 className="titleJobs">Servicios ofrecidos en nuestra pagina</h1>
         <div className='containerListW'>
           {work.map((work) => (
-            <Link to="/person/new"><h2  className="worksList">{work.names}</h2></Link>
+            <Link to="/person/new"><h2 key={work.work_id}  className="worksList">{work.names}</h2></Link>
           ))
           }
         </div>
