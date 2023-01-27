@@ -49,3 +49,18 @@
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
 }
+
+.image {
+  width: 30%;
+  margin-bottom: 5%;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
