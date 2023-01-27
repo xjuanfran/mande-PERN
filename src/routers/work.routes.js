@@ -7,7 +7,7 @@ router.get('/work', getAllWork);
 
 router.get('/work/getAllMyWorks/:id', getAllMyWorks);
 
-router.get('/work', getActiveWork);
+router.get('/work/active', getActiveWork);
 
 router.get('/work/:id', getWork);
 
