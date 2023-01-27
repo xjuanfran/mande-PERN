@@ -7,6 +7,7 @@ import Navbar from './components/Navbar'
 import ClientForm from './components/ClientForm'
 import EmployeeForm from './components/EmployeeForm'
 import Login from './components/Login'
+import WorksList from './components/WorksList'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/person/new" element={<PersonForm />} />
         <Route path="/client/:id/new" element={<ClientForm />} />
         <Route path="/employee/new" element={<EmployeeForm />} />
+        <Route path="/workslist" element={<WorksList />} />
         <Route path="/login" element={<Login />} />
         {/*mising route edit person*/}
         {/*mising route edit client*/}
