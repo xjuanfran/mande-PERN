@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from '@mui/material'
 import { HelmetProvider, Helmet } from 'react-helmet-async'
-import '../style-sheet/Home.css'
+import '../style-sheet/WorksList.css'
 import git from '../images/git.png'
 import instagram from '../images/instragramLogo.png'
 import facebook from '../images/faceLogo.png'
@@ -61,7 +61,6 @@ export default function Home() {
           </section>
           <div className="album py-5 bg-light">
             <div className="container">
-        
               <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div className="col">
                   <div className="card shadow-sm">

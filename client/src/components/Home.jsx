@@ -14,6 +14,7 @@ export default function Home() {
 
   const loadWorks = async () => {
     const response = await fetch("http://localhost:4000/work/active")
+    //const response = await fetch("https://mandeproject.herokuapp.com/")
     const data = await response.json()
     console.log(data)
     setWork(data)
