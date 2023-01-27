@@ -36,7 +36,6 @@ app.use((err, req, res, next) => {
   })
 });
 
-const port = process.env.PORT || 4000;
-
-app.listen(port);
-console.log("My server on port 4000");
+app.listen((process.env.PORT || 4000), function(){
+  console.log('listening on *:4000');
+});
