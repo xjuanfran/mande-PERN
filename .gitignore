@@ -1,5 +1,5 @@
 #Ignore module files
 node_modules
 #ignore .env files
-.ENV
+/*.ENV
 
