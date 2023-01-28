@@ -37,8 +37,9 @@ export default function InputAdornments() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //console.log(person);  
+    console.log(person , address); 
 
+    let continuePage = false;
     let id = 0;
     //Valida si el correo o el telefono ya existen donde en caso de que exista devuelve True y en caso de que no exista devuelve False
     const dataValidation = await fetch('http://localhost:4000/person/validation', {
@@ -51,6 +52,7 @@ export default function InputAdornments() {
     const dataResultValidation = await dataValidation.json();
     //Crea en base de los datos la persona y la direccion si la validacion es false
     if (dataResultValidation.message === false) {
+      continuePage = true; 
       const data = await fetch('http://localhost:4000/person', {
         method: 'POST',
         body: JSON.stringify(person),
@@ -78,13 +80,19 @@ export default function InputAdornments() {
       const dataResultAddress = await dataAddress.json();
       console.log(dataResultAddress);
     } else {
-      console.log('El correo ya existe o el telefono ya existe');
+      continuePage = false;
     }
 
-    if(kindPerson.type_user.label === 'Cliente'){
-      navigate(`/client/${id}/new`)
-    }else if(kindPerson.type_user.label === 'Empleado'){
-      navigate('/employee/new')
+    if(continuePage === true){
+      // if(kindPerson.type_user.label === 'Cliente'){
+      //   navigate(`/client/${id}/new`)
+      // }else if(kindPerson.type_user.label === 'Empleado'){
+      //   navigate('/employee/new')
+      // }
+      console.log("entro");
+    }
+    else {
+      alert('El correo o el telefono ya existen')
     }
   }
 
@@ -98,12 +106,12 @@ export default function InputAdornments() {
 
   const handleChangePerson = (e) => {
     //console.log(e.target.name, e.target.value);
-    setPerson({ ...person, [e.target.name]: e.target.value })
+    //setPerson({ ...person, [e.target.name]: e.target.value })
   }
 
   const [address, setAddress] = useState({
-    latitude: '',
-    longitude: ''
+    description: '',
+    coordenates: ''
   })
 
   const handleChangeAddress = (e) => {
@@ -187,23 +195,12 @@ export default function InputAdornments() {
                 />
                 <TextField
                   variant='outlined'
-                  label='Latitud'
+                  label='Direccion'
                   sx={{
                     display: "block",
                     margin: ".5rem 0"
                   }}
-                  name='latitude'
-                  onChange={handleChangeAddress}
-                  InputLabelProps={{ style: { color: 'black' } }}
-                />
-                <TextField
-                  variant='outlined'
-                  label='Longitud'
-                  sx={{
-                    display: "block",
-                    margin: ".5rem 0"
-                  }}
-                  name='longitude'
+                  name='description'
                   onChange={handleChangeAddress}
                   InputLabelProps={{ style: { color: 'black' } }}
                 />

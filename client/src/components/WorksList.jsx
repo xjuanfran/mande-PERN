@@ -9,7 +9,7 @@ export default function WorksList() {
   const [review, setReview] = useState([]);
 
   const loadEmployeePic = async () => {
-    const employeeResponse = await fetch("http://localhost:4000/employee");
+    const employeeResponse = await fetch("http://localhost:4000/employee/Allwork/2");
     const employeeData = await employeeResponse.json();
     const employeePic = await employeeData.map((employeeData) => (employeeData.profile_picture));
     //console.log(employeePic);
@@ -56,8 +56,8 @@ export default function WorksList() {
     <div>
       <div className="album py-5 bg-light positionCard">
         <div className="card-container">
-          {description.map((description, i) => (
-            <Card key={i} picture={picture[i]} description={description[i]} review={review[i]} />
+          {picture.map((picture, i) => (
+            <Card key={i} picture={picture} description={description[i]} review={review[i]} />
           ))}
         </div>
       </div>
