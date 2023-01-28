@@ -14,7 +14,6 @@ export default function Home() {
 
   const loadWorks = async () => {
     const response = await fetch("http://localhost:4000/work/active")
-    //const response = await fetch("https://mandeproject.herokuapp.com/")
     const data = await response.json()
     console.log(data)
     setWork(data)
@@ -72,7 +71,7 @@ export default function Home() {
         <h1 className="titleJobs">Servicios ofrecidos en nuestra pagina</h1>
         <div className='containerListW'>
           {work.map((work) => (
-            <Link to="/person/new"><h2 key={work.work_id}  className="worksList">{work.names}</h2></Link>
+            <Link to="/person/new" key={work.work_id}><h2 className="worksList">{work.names}</h2></Link>
           ))
           }
         </div>
