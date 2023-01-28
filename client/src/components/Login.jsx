@@ -1,18 +1,35 @@
 import React from 'react'
 import '../style-sheet/Login.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 export default function Login() {
+
+  const navigate = useNavigate();
 
   const [user, setUser] = useState({
     email: '',
     password: ''
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user);
+    //console.log(user);
+    const dataUser = await fetch('http://localhost:4000/person/login', {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    const data = await dataUser.json();
+    console.log(data);
+
+    if(data.message === "Person not found"){
+      alert("Usuario no encontrado");
+    }else{
+      navigate(`/${data}`);
+    }
   }
 
   const handleChange = (e) => {

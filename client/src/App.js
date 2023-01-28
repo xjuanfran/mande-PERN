@@ -1,6 +1,6 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Home from './components/Home'
-import PersonList from './components/PersonList'
+//import PersonList from './components/PersonList'
 import PersonForm from './components/PersonForm'
 import Navbar from './components/Navbar'
 //import {Container} from '@mui/material'
@@ -14,13 +14,13 @@ export default function App() {
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/person" element={<PersonList />} />
+        <Route path="/:id" element={<Home />} />
         <Route path="/person/new" element={<PersonForm />} />
         <Route path="/client/:id/new" element={<ClientForm />} />
         <Route path="/employee/new" element={<EmployeeForm />} />
-        <Route path="/workslist" element={<WorksList />} />
+        <Route path="/workslist/:id" element={<WorksList />} />
         <Route path="/login" element={<Login />} />
+        {/* <Route path="/person" element={<PersonList />} /> */}
         {/*mising route edit person*/}
         {/*mising route edit client*/}
       </Routes>
