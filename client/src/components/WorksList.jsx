@@ -42,8 +42,8 @@ export default function WorksList() {
 
   function Card({ picture, description, review }) {
     return (
-      <div className="card-body">
-        <img className=" image" src={picture} key={picture} alt="Card image cap" />
+      <div id='cardBodyWorkList'>
+        <img className="image" src={picture} key={picture} alt="Foto del perfil" />
         <h5 className="card-title">{description}</h5>
         <p className="card-text">{review}</p>
         <a href="/" className="btn btn-primary">Go somewhere</a>
