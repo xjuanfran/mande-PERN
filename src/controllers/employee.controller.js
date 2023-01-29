@@ -13,10 +13,38 @@ const getAllemployee = async (req, res, next) => {
 
 //devuelve todos los empleados que tiene un trabajo en estado Y
 const getAllWorkEmployee = async (req, res, next) => {
-    const { id } = req.params;
+    const { id_work, idUser } = req.params;
     try {
-        const result = await pool.query("SELECT * FROM employee WHERE employee_id IN " +
-                "(SELECT employee_id FROM employees_work WHERE work_id = $1)", [id]);
+
+        const resultAddress = await pool.query("SELECT description FROM address WHERE address_id = $1 AND status = 'Y'", [idUser]);
+        direccionUsuario = resultAddress.rows[0].description;
+
+        const geo = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${direccionUsuario}`);
+        const data = await geo.json();
+        let coordenates = data[0].lon + " " + data[0].lat;
+        console.log(coordenates);
+
+        const result = await pool.query("SELECT E.employee_id, P.first_name, P.last_name, " +
+            "E.profile_picture, EW.work_id, EW.price_hour, EW.description, " +
+            "R.rating/total_jobs AS scored, A.description, " +
+            "ST_Distance(ST_GeographyFromText('Point(" + coordenates + ")'), coordenates) AS distance  "+
+            "FROM address A INNER JOIN employee E " +
+                "ON A.person_id = E.employee_id " +
+                "AND A.status = 'Y' " +
+                "AND E.status = 'Y' " +
+                "AND available = 'Y' " +
+            "INNER JOIN person P " +
+                "ON P.person_id = E.employee_id " +
+                "AND P.status = 'Y' " +
+            "INNER JOIN reviews R " +
+                "ON R.employee_id = E.employee_id " +
+            "INNER JOIN employees_work EW " +
+                "ON EW.employee_id = E.employee_id " +
+                "AND EW.status = 'Y' " +
+            "WHERE " +
+            "EW.work_id = $1 " +
+            "ORDER BY " +
+            "8, 10, 6 DESC", [id_work]);
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Este trabajo aun no tiene empleados' })
         }
