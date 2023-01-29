@@ -65,9 +65,8 @@ export default function InputAdornments() {
       id = dataResult.person_id;
       //Contruye el objeto completo para enviar a la tabla address
       const completeAddress = {
-        person_id: dataResult.person_id,
-        latitude: address.latitude,
-        longitude: address.longitude
+        description: address.description,
+        person_id: dataResult.person_id
       }
       //Envia el objeto completo a la tabla address
       const dataAddress = await fetch('http://localhost:4000/address', {
@@ -84,12 +83,11 @@ export default function InputAdornments() {
     }
 
     if(continuePage === true){
-      // if(kindPerson.type_user.label === 'Cliente'){
-      //   navigate(`/client/${id}/new`)
-      // }else if(kindPerson.type_user.label === 'Empleado'){
-      //   navigate('/employee/new')
-      // }
-      console.log("entro");
+      if(kindPerson.type_user.label === 'Cliente'){
+        navigate(`/client/${id}/new`)
+      }else if(kindPerson.type_user.label === 'Empleado'){
+        navigate(`/employee/${id}/new`)
+      }
     }
     else {
       alert('El correo o el telefono ya existen')
@@ -106,12 +104,12 @@ export default function InputAdornments() {
 
   const handleChangePerson = (e) => {
     //console.log(e.target.name, e.target.value);
-    //setPerson({ ...person, [e.target.name]: e.target.value })
+    setPerson({ ...person, [e.target.name]: e.target.value })
   }
 
   const [address, setAddress] = useState({
     description: '',
-    coordenates: ''
+    person_id: ''
   })
 
   const handleChangeAddress = (e) => {

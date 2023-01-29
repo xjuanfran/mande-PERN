@@ -7,6 +7,8 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera'
 import avatar from '../images/avatar.png'
 import avatarID from '../images/avatarID.png'
 import { Autocomplete } from '@mui/material'
+import { useParams } from 'react-router-dom';
+
 
 //array of options for employee type
 // const employeeOptions = [fetch('http://localhost:4000/work')];
@@ -31,8 +33,10 @@ export default function EmployeeForm() {
   const [img, setImg] = useState(null);
   const [imgID, setImgID] = useState(null);
 
+  const params = useParams();
   //state for employee  
   const [employee, setEmployee] = useState({
+    employee_id: params.id,
     photo_id: '',
     profile_picture: ''
   })
@@ -57,7 +61,7 @@ export default function EmployeeForm() {
 
 
   const [employeeWork, setEmployeeWork] = useState({
-    employee_id: '',
+    employee_id: params.id,
     work_id: '',
     price_hour: '',
     description: ''

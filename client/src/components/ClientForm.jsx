@@ -49,9 +49,8 @@ export default function ClientForm() {
         }
       })
       const dataResultPayM = await dataPayM.json();
-      console.log(dataResultPayM);
     } else {
-      console.log("El metodo de pago ya existe");
+      alert("El metodo de pago ya existe");
     }
   }
 

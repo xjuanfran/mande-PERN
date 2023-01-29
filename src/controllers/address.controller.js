@@ -81,7 +81,7 @@ const deleteAddress = async (req, res, next) => {
 const updateAddress = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { description, person_id } = req.body;
+    const { description } = req.body;
 
     //Obtiene las coordenadas de la dirección
     const geo = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${description}`);
