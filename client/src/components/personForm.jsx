@@ -12,6 +12,8 @@ import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Link, useNavigate } from 'react-router-dom';
+//import crypto from "crypto";
+import md5 from 'md5';
 
 
 const kindUser = [
@@ -37,8 +39,9 @@ export default function InputAdornments() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(person, address);
-
+    //console.log(person.password);
+    //console.log(encriptarPassword(person.password));
+    person.password = encriptarPassword(person.password);
     let continuePage = false;
     let id = 0;
     //Valida si el correo o el telefono ya existen donde en caso de que exista devuelve True y en caso de que no exista devuelve False
@@ -101,9 +104,14 @@ export default function InputAdornments() {
     phone: '',
     password: ''
   })
+  function encriptarPassword(password){
+    return md5(password);
+  }
+  
 
   const handleChangePerson = (e) => {
-    //console.log(e.target.name, e.target.value);
+  // console.log(e.target.name, e.target.value);
+
     setPerson({ ...person, [e.target.name]: e.target.value })
   }
 
