@@ -88,7 +88,27 @@ export default function EmployeeForm() {
         setWorks({ ...works, work_id: '' })
       }
     }
-    console.log(employee, employeeWork);
+    //console.log(employee, employeeWork);
+
+    const employeeData = await fetch('http://localhost:4000/employee/', {
+      method: 'POST',
+      body: JSON.stringify(employee),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const employeeDataJson = await employeeData.json();
+    console.log(employeeDataJson);
+
+    const employeeWorkData = await fetch('http://localhost:4000/employeesWork', {
+      method: 'POST',
+      body: JSON.stringify(employeeWork),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const employeeWorkDataJson = await employeeWorkData.json();
+    console.log(employeeWorkDataJson);
   }
 
   return (

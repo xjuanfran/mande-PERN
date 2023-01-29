@@ -11,7 +11,7 @@ import { Card, CardContent, TextField, Typography, Button } from '@mui/material'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
-import {useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const kindUser = [
@@ -37,7 +37,7 @@ export default function InputAdornments() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(person , address); 
+    console.log(person, address);
 
     let continuePage = false;
     let id = 0;
@@ -52,7 +52,7 @@ export default function InputAdornments() {
     const dataResultValidation = await dataValidation.json();
     //Crea en base de los datos la persona y la direccion si la validacion es false
     if (dataResultValidation.message === false) {
-      continuePage = true; 
+      continuePage = true;
       const data = await fetch('http://localhost:4000/person', {
         method: 'POST',
         body: JSON.stringify(person),
@@ -82,10 +82,10 @@ export default function InputAdornments() {
       continuePage = false;
     }
 
-    if(continuePage === true){
-      if(kindPerson.type_user.label === 'Cliente'){
+    if (continuePage === true) {
+      if (kindPerson.type_user.label === 'Cliente') {
         navigate(`/client/${id}/new`)
-      }else if(kindPerson.type_user.label === 'Empleado'){
+      } else if (kindPerson.type_user.label === 'Empleado') {
         navigate(`/employee/${id}/new`)
       }
     }
@@ -122,6 +122,21 @@ export default function InputAdornments() {
       <Helmet>
         <style>{'body { background-color: #003748; }'}</style>
       </Helmet>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="container-fluid">
+          <Link className="navbar-brand" to="/">Mande</Link>
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <a className="nav-link active" aria-current="page" href="/login">Iniciar sesion</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
       <Grid
         container
         direction="column"

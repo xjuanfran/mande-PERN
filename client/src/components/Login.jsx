@@ -38,6 +38,11 @@ export default function Login() {
 
   return (
     <div className="main">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="container-fluid">
+          <Link className="navbar-brand" to="/">Mande</Link>
+        </div>
+      </nav>
       <div className="global-container">
         <div className="card login-form">
           <div className="card-body">

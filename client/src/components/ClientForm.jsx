@@ -13,7 +13,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Grid, Card, Typography, CardContent, TextField, Button } from '@mui/material'
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 
 //type of card, debit or credit
@@ -49,6 +49,7 @@ export default function ClientForm() {
         }
       })
       const dataResultPayM = await dataPayM.json();
+      console.log(dataResultPayM);
     } else {
       alert("El metodo de pago ya existe");
     }
@@ -100,6 +101,21 @@ export default function ClientForm() {
       <Helmet>
         <style>{'body { background-color: #003748; }'}</style>
       </Helmet>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="container-fluid">
+          <Link className="navbar-brand" to="/">Mande</Link>
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <a className="nav-link active" aria-current="page" href="/login">Iniciar sesion</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
       <Grid
         container
         direction="column"
