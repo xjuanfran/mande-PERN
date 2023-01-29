@@ -24,9 +24,15 @@ export default function ClientForm() {
   //state for img
   const [img, setImg] = useState(null);
 
+  //Hook to manage the loading state
+  const [loading, setLoading] = useState(false);
+
   //on submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
+
     const dataUser = await fetch('http://localhost:4000/user', {
       method: 'POST',
       body: JSON.stringify(user),
@@ -53,6 +59,8 @@ export default function ClientForm() {
     } else {
       alert("El metodo de pago ya existe");
     }
+
+    setLoading(false);
   }
 
   const params = useParams();
@@ -265,6 +273,7 @@ export default function ClientForm() {
                   variant='contained'
                   color='primary'
                   type='submit'
+                  disabled={!payM.card_type && !payM.card_number && !payM.expiration_date && !payM.cvv && !user.utility_bill && !user.name && !user.last_name && !user.email && !user.password && !user.password_confirmation}
                   sx={{
                     display: "block",
                     margin: ".5rem 0"
@@ -277,7 +286,11 @@ export default function ClientForm() {
                     marginTop: "1rem"
                   }}
                 >
-                  Crear cuenta
+                  {loading ? <div class="spinner-border" role="status">
+                    <span class="visually-hidden"
+                    >Loading...
+                    </span>
+                  </div> : 'Iniciar sesion'}
                 </Button>
               </form>
             </CardContent>

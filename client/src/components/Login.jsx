@@ -7,6 +7,9 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  //Hook to manage the loading state
+  const [loading, setLoading] = useState(false);
+
   const [user, setUser] = useState({
     email: '',
     password: ''
@@ -14,7 +17,9 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //console.log(user);
+
+    setLoading(true);
+
     const dataUser = await fetch('http://localhost:4000/person/login', {
       method: 'POST',
       body: JSON.stringify(user),
@@ -25,9 +30,11 @@ export default function Login() {
     const data = await dataUser.json();
     console.log(data);
 
-    if(data.message === "Person not found"){
+    setLoading(false);
+
+    if (data.message === "Person not found") {
       alert("Usuario no encontrado");
-    }else{
+    } else {
       navigate(`/${data}`);
     }
   }
@@ -71,11 +78,15 @@ export default function Login() {
                   <input
                     type="password"
                     className="form-control form-control-sm" id="exampleInputPassword1"
-                    name="password" 
+                    name="password"
                     onChange={handleChange}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary btn-block">Iniciar sesión</button>
+                <button type="submit" className="btn btn-primary btn-block">
+                  {loading ? <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div> : 'Iniciar sesion'}
+                </button>
                 <div className="sign-up">
                   ¿Nuevo en Mande? Crea una cuenta en <Link to="/person/new">Mande</Link>
                 </div>
