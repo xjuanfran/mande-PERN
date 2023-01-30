@@ -14,6 +14,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async'
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Grid, Card, Typography, CardContent, TextField, Button } from '@mui/material'
 import { Link, useParams } from 'react-router-dom';
+import md5 from 'md5';
 
 
 //type of card, debit or credit
@@ -30,7 +31,9 @@ export default function ClientForm() {
   //on submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    payM.cvv = encriptarMethodP( payM.cvv);
+    payM.card_number = encriptarMethodP( payM.card_number);
+    //console.log(payM);
     setLoading(true);
 
     const dataUser = await fetch('http://localhost:4000/user', {
@@ -86,6 +89,10 @@ export default function ClientForm() {
     expiration_date: '',
     user_id: params.id
   })
+
+  function encriptarMethodP(datos){
+    return md5(datos);
+  }
 
   //handle change for payment method
   const handleChangePayM = (e) => {
@@ -286,8 +293,8 @@ export default function ClientForm() {
                     marginTop: "1rem"
                   }}
                 >
-                  {loading ? <div class="spinner-border" role="status">
-                    <span class="visually-hidden"
+                  {loading ? <div className="spinner-border" role="status">
+                    <span className="visually-hidden"
                     >Loading...
                     </span>
                   </div> : 'Iniciar sesion'}

@@ -44,6 +44,7 @@ export default function InputAdornments() {
     person.password = encriptarPassword(person.password);
     let continuePage = false;
     let id = 0;
+    
     //Valida si el correo o el telefono ya existen donde en caso de que exista devuelve True y en caso de que no exista devuelve False
     const dataValidation = await fetch('http://localhost:4000/person/validation', {
       method: 'POST',
