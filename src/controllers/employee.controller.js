@@ -45,6 +45,7 @@ const getAllWorkEmployee = async (req, res, next) => {
             "EW.work_id = $1 " +
             "ORDER BY " +
             "8, 10, 6 DESC", [id_work]);
+            console.log(id_work);
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Este trabajo aun no tiene empleados' })
         }

@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/employee', getAllemployee);
 
-router.get('/employee/Allwork/:idWork/:idUser', getAllWorkEmployee);
+router.get('/employee/Allwork/:id_work/:idUser', getAllWorkEmployee);
 
 router.get('/employee/:id', getemployee);
 

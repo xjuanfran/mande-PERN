@@ -35,6 +35,7 @@ export default function EmployeeForm() {
   const [imgID, setImgID] = useState(null);
 
   const params = useParams();
+
   //state for employee  
   const [employee, setEmployee] = useState({
     employee_id: params.id,
@@ -60,7 +61,6 @@ export default function EmployeeForm() {
     names: ''
   })
 
-
   const [employeeWork, setEmployeeWork] = useState({
     employee_id: params.id,
     work_id: '',
@@ -76,6 +76,8 @@ export default function EmployeeForm() {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+
+    console.log(employee, employeeWork);
 
     setLoading(true);
 
@@ -114,6 +116,25 @@ export default function EmployeeForm() {
     })
     const employeeWorkDataJson = await employeeWorkData.json();
     console.log(employeeWorkDataJson);
+
+    //construye el objeto review para crearlo en la base de datos
+
+    const reviewData = {
+      employee_id: employeeDataJson.employee_id,
+      total_jobs : 0,
+      rating: 0
+    }
+
+    const review = await fetch('http://localhost:4000/reviews', {
+      method: 'POST',
+      body: JSON.stringify(reviewData),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const reviewJson = await review.json();
+    console.log(reviewJson);
 
     setLoading(false);
     navigate('/');
