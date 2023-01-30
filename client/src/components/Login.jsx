@@ -2,6 +2,7 @@ import React from 'react'
 import '../style-sheet/Login.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import md5 from 'md5'
 
 export default function Login() {
 
@@ -14,10 +15,12 @@ export default function Login() {
     email: '',
     password: ''
   })
-
+  function encriptarPassword(password){
+    return md5(password);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    user.password = encriptarPassword(user.password);
     setLoading(true);
 
     const dataUser = await fetch('http://localhost:4000/person/login', {
@@ -83,7 +86,7 @@ export default function Login() {
                   />
                 </div>
                 <button type="submit" className="btn btn-primary btn-block">
-                  {loading ? <div class="spinner-border" role="status">
+                  {loading ? <div className="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
                   </div> : 'Iniciar sesion'}
                 </button>
