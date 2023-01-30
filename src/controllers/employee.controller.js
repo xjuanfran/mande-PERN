@@ -44,7 +44,7 @@ const getAllWorkEmployee = async (req, res, next) => {
             "WHERE " +
             "EW.work_id = $1 AND E.employee_id <> $2" +
             "ORDER BY " +
-            "8, 10, 6 DESC", [id_work]);
+            "8, 10, 6 DESC", [id_work, idUser]);
             console.log(id_work, idUser);
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Este trabajo aun no tiene empleados' })
