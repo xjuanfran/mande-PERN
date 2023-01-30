@@ -26,7 +26,7 @@ const getAllWorkEmployee = async (req, res, next) => {
 
         const result = await pool.query("SELECT E.employee_id, P.first_name, P.last_name, " +
             "E.profile_picture, EW.work_id, EW.price_hour, EW.description, " +
-            "R.rating/total_jobs AS scored, A.description, " +
+            "CASE WHEN total_jobs = 0 THEN 0 ELSE R.rating/total_jobs END scored, A.description AS direccion, " +
             "ST_Distance(ST_GeographyFromText('Point(" + coordenates + ")'), coordenates) AS distance  "+
             "FROM address A INNER JOIN employee E " +
                 "ON A.person_id = E.employee_id " +
