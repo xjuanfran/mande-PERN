@@ -1,4 +1,4 @@
-import { Card, Grid, Typography, CardContent, TextField, Button } from '@mui/material'
+import { Card, Grid, Typography, CardContent, TextField, Button, CircularProgress } from '@mui/material'
 import React from 'react'
 import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { useEffect, useState } from 'react'
@@ -7,13 +7,14 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera'
 import avatar from '../images/avatar.png'
 import avatarID from '../images/avatarID.png'
 import { Autocomplete } from '@mui/material'
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
-
-//array of options for employee type
-// const employeeOptions = [fetch('http://localhost:4000/work')];
 
 export default function EmployeeForm() {
+
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
 
   //to fill combobox type of works with data from database
   const [work, setWork] = useState([]);
@@ -56,7 +57,7 @@ export default function EmployeeForm() {
 
   const [works, setWorks] = useState({
     work_id: '',
-    names: ''    
+    names: ''
   })
 
 
@@ -73,13 +74,17 @@ export default function EmployeeForm() {
 
   //handle submit for employee
   const handleSubmit = async (e) => {
+
     e.preventDefault();
+
+    setLoading(true);
+
     const response = await fetch('http://localhost:4000/work');
     const dataCombo = await response.json();
     //let workId = data.map((work) => work.work_id);
     //console.log(workId);
     ///console.log(works.names)
-    
+
     for (let i = 0; i < dataCombo.length; i++) {
       if (dataCombo[i].names === works.names) {
         employeeWork.work_id = dataCombo[i].work_id;
@@ -109,6 +114,9 @@ export default function EmployeeForm() {
     })
     const employeeWorkDataJson = await employeeWorkData.json();
     console.log(employeeWorkDataJson);
+
+    setLoading(false);
+    navigate('/');
   }
 
   return (
@@ -267,19 +275,21 @@ export default function EmployeeForm() {
                   variant='contained'
                   color='primary'
                   type='submit'
+                  disabled={
+                    !employeeWork.price_hour || !employeeWork.description || !employee.profile_picture || !employee.photo_id
+                  }
                   sx={{
                     display: "block",
                     margin: ".5rem 0"
                   }}
                   style={{
-                    backgroundColor: "#0a0a23",
                     color: "white",
                     width: "70%",
                     margin: "0 auto",
                     marginTop: "1rem"
                   }}
                 >
-                  Crear cuenta
+                  {loading ? <CircularProgress color="inherit" /> : "Registrar"}
                 </Button>
               </CardContent>
             </form>

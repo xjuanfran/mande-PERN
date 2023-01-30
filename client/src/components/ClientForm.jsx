@@ -12,15 +12,18 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Grid, Card, Typography, CardContent, TextField, Button } from '@mui/material'
+import { Grid, Card, Typography, CardContent, TextField, Button, CircularProgress } from '@mui/material'
 import { Link, useParams } from 'react-router-dom';
 import md5 from 'md5';
+import { useNavigate } from 'react-router-dom';
 
 
 //type of card, debit or credit
 const cardOptions = ['Debito', 'Credito'];
 
 export default function ClientForm() {
+
+  const navigate = useNavigate();
 
   //state for img
   const [img, setImg] = useState(null);
@@ -31,10 +34,12 @@ export default function ClientForm() {
   //on submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
-    payM.cvv = encriptarMethodP( payM.cvv);
-    payM.card_number = encriptarMethodP( payM.card_number);
-    //console.log(payM);
+
     setLoading(true);
+
+    payM.cvv = encriptarMethodP(payM.cvv);
+    payM.card_number = encriptarMethodP(payM.card_number);
+    //console.log(payM);
 
     const dataUser = await fetch('http://localhost:4000/user', {
       method: 'POST',
@@ -64,6 +69,8 @@ export default function ClientForm() {
     }
 
     setLoading(false);
+    navigate('/');
+    
   }
 
   const params = useParams();
@@ -90,7 +97,7 @@ export default function ClientForm() {
     user_id: params.id
   })
 
-  function encriptarMethodP(datos){
+  function encriptarMethodP(datos) {
     return md5(datos);
   }
 
@@ -278,26 +285,23 @@ export default function ClientForm() {
                 {img ? <img alt="Preview" height="60" src={URL.createObjectURL(img)} /> : null}
                 <Button
                   variant='contained'
-                  color='primary'
+                  color='info'
                   type='submit'
-                  disabled={!payM.card_type && !payM.card_number && !payM.expiration_date && !payM.cvv && !user.utility_bill && !user.name && !user.last_name && !user.email && !user.password && !user.password_confirmation}
+                  disabled={!payM.card_type || !payM.card_number || !payM.expiration_date || !payM.cvv || !user.utility_bill}
                   sx={{
                     display: "block",
                     margin: ".5rem 0"
                   }}
                   style={{
-                    backgroundColor: "#0a0a23",
                     color: "white",
                     width: "80%",
                     margin: "0 auto",
                     marginTop: "1rem"
                   }}
                 >
-                  {loading ? <div className="spinner-border" role="status">
-                    <span className="visually-hidden"
-                    >Loading...
-                    </span>
-                  </div> : 'Iniciar sesion'}
+                  {
+                    loading ? <CircularProgress color="info" size={20} /> : 'Registrarse'
+                  }
                 </Button>
               </form>
             </CardContent>

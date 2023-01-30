@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Grid from '@mui/material/Grid';
-import { Card, CardContent, TextField, Typography, Button } from '@mui/material';
+import { Card, CardContent, TextField, Typography, Button, CircularProgress } from '@mui/material';
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -25,6 +25,8 @@ export default function InputAdornments() {
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -39,6 +41,9 @@ export default function InputAdornments() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
+
     //console.log(person.password);
     //console.log(encriptarPassword(person.password));
     person.password = encriptarPassword(person.password);
@@ -85,6 +90,8 @@ export default function InputAdornments() {
     } else {
       continuePage = false;
     }
+
+    setLoading(false);
 
     if (continuePage === true) {
       if (kindPerson.type_user.label === 'Cliente') {
@@ -268,19 +275,19 @@ export default function InputAdornments() {
                   variant='contained'
                   color='primary'
                   type='submit'
+                  disabled={!person.first_name || !person.last_name || !person.email || !person.phone || !person.password || !kindPerson.type_user || !address.description}
                   sx={{
                     display: "block",
                     margin: ".5rem 0"
                   }}
                   style={{
-                    backgroundColor: "#0a0a23",
                     color: "white",
-                    width: "50%",
+                    width: "70%",
                     margin: "0 auto",
                     marginTop: "1rem"
                   }}
                 >
-                  Siguiente
+                  {loading ? <CircularProgress color="inherit" size={14}/> : "Registrarse"}
                 </Button>
               </form>
             </CardContent>
