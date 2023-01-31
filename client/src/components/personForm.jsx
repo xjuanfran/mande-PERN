@@ -112,11 +112,11 @@ export default function InputAdornments() {
     phone: '',
     password: ''
   })
+  
   function encriptarPassword(password){
     return md5(password);
   }
   
-
   const handleChangePerson = (e) => {
   // console.log(e.target.name, e.target.value);
 

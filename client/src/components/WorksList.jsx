@@ -26,7 +26,8 @@ export default function WorksList() {
     const employeePic = await employeeData.map((employeeData) => (employeeData.profile_picture));
     console.log(employeePic);
     setPicture(employeePic);
-  })
+  }, [ idWork.idWork, idUser.idPerson ]
+  )
 
   const loadEmployeeName = useCallback(
     async () => {
@@ -35,32 +36,38 @@ export default function WorksList() {
       const name = await nameData.map((nameData) => (nameData.first_name + " " + nameData.last_name));
       console.log(name);
       setNameEmployee(name);
-    }
+    }, [ idWork.idWork, idUser.idPerson ]
   ) 
 
-  const loadWorkDescription = async () => {
-    const descriptionResponse = await fetch(`http://localhost:4000/employee/Allwork/${idWork.idWork}/${idUser.idPerson}`);
-    const descriptionData = await descriptionResponse.json();
-    const description = await descriptionData.map((descriptionData) => (descriptionData.description));
-    console.log(description);
-    setDescription(description);
-  }
+  const loadWorkDescription = useCallback(
+    async () => {
+      const descriptionResponse = await fetch(`http://localhost:4000/employee/Allwork/${idWork.idWork}/${idUser.idPerson}`);
+      const descriptionData = await descriptionResponse.json();
+      const description = await descriptionData.map((descriptionData) => (descriptionData.description));
+      console.log(description);
+      setDescription(description);
+    }, [ idWork.idWork, idUser.idPerson ]
+  ) 
 
-  const loadDistance = async () => {
-    const distanceResponse = await fetch(`http://localhost:4000/employee/Allwork/${idWork.idWork}/${idUser.idPerson}`);
-    const distanceData = await distanceResponse.json();
-    const distance = await distanceData.map((distanceData) => (distanceData.distance));
-    console.log(distance);
-    setDistance(distance);
-  }
+  const loadDistance = useCallback(
+    async () => {
+      const distanceResponse = await fetch(`http://localhost:4000/employee/Allwork/${idWork.idWork}/${idUser.idPerson}`);
+      const distanceData = await distanceResponse.json();
+      const distance = await distanceData.map((distanceData) => (distanceData.distance));
+      console.log(distance);
+      setDistance(distance);
+    }, [ idWork.idWork, idUser.idPerson ]
+  ) 
 
-  const loadReview = async () => {
-    const reviewResponse = await fetch(`http://localhost:4000/employee/Allwork/${idWork.idWork}/${idUser.idPerson}`);
-    const reviewData = await reviewResponse.json();
-    const review = await reviewData.map((reviewData) => (reviewData.scored));
-    console.log(review);
-    setReview(review);
-  }
+  const loadReview = useCallback(
+    async () => {
+      const reviewResponse = await fetch(`http://localhost:4000/employee/Allwork/${idWork.idWork}/${idUser.idPerson}`);
+      const reviewData = await reviewResponse.json();
+      const review = await reviewData.map((reviewData) => (reviewData.scored));
+      console.log(review);
+      setReview(review);
+    }, [ idWork.idWork, idUser.idPerson ]
+  ) 
 
   useEffect(() => {
     loadEmployeePic();
