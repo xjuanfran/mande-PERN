@@ -102,12 +102,7 @@ export default function EmployeeForm() {
     );
 
     const dataClaudinary = await responseClaudinary.json();
-    console.log(dataClaudinary);
-
-    const data = await response.json();
-    setUrl(data.secure_url);
-    
-    setLoading(false);
+    console.log(dataClaudinary.secure_url);
 
     const response = await fetch('http://localhost:4000/work');
     const dataCombo = await response.json();
@@ -125,9 +120,18 @@ export default function EmployeeForm() {
     }
     //console.log(employee, employeeWork);
 
+     //Contruye el objeto completo para enviar a la tabla employee
+
+     let img = dataClaudinary.secure_url;
+
+     const completeEmployee = {
+      photo_id: employee.photo_id,
+      profile_picture: img
+    }
+
     const employeeData = await fetch('http://localhost:4000/employee/', {
       method: 'POST',
-      body: JSON.stringify(employee),
+      body: JSON.stringify(completeEmployee),
       headers: {
         'Content-Type': 'application/json'
       }

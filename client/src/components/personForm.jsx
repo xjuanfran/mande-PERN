@@ -69,9 +69,11 @@ export default function InputAdornments() {
           'Content-Type': 'application/json'
         }
       })
+      
       const dataResult = await data.json();
       console.log(dataResult);
       id = dataResult.person_id;
+
       //Contruye el objeto completo para enviar a la tabla address
       const completeAddress = {
         description: address.description,
