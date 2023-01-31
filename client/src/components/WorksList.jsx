@@ -99,7 +99,7 @@ export default function WorksList() {
       <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
-        <Link className="navbar-brand" to={{pathname: `/${idPerson.id}`}}>Mande</Link>
+        <Link className="navbar-brand" to={{pathname: `/${idUser.idPerson}`}}>Mande</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -112,8 +112,8 @@ export default function WorksList() {
                 Perfil
               </a>
               <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><Link className="dropdown-item" to={{pathname: `/service/record/${idPerson.id}`}}>Historial de servicios</Link></li>
-                <li><Link className="dropdown-item" to={{pathname: `/setPayMethod/${idPerson.id}`}}>Modificar método de pago</Link></li>
+                <li><Link className="dropdown-item" to={{pathname: `/service/record/${idUser.idPerson}`}}>Historial de servicios</Link></li>
+                <li><Link className="dropdown-item" to={{pathname: `/setPayMethod/${idUser.idPerson}`}}>Modificar método de pago</Link></li>
                 <li><a className="dropdown-item" href="/">Cerrar sesion</a></li>
               </ul>
             </li>

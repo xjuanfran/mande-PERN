@@ -14,7 +14,9 @@ export default function EmployeeForm() {
 
   const navigate = useNavigate();
 
+  const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [url, setUrl] = useState("");
 
   //to fill combobox type of works with data from database
   const [work, setWork] = useState([]);
@@ -56,6 +58,10 @@ export default function EmployeeForm() {
     setImgID(e.target.files[0])
   }
 
+  const handleChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
   const [works, setWorks] = useState({
     work_id: '',
     names: ''
@@ -80,6 +86,28 @@ export default function EmployeeForm() {
     console.log(employee, employeeWork);
 
     setLoading(true);
+
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", "hbmwrpgt");
+    const responseClaudinary = await fetch(
+      "https://api.cloudinary.com/v1_1/dj48mc1gg/image/upload",
+      {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+      }
+    );
+
+    const dataClaudinary = await responseClaudinary.json();
+    console.log(dataClaudinary);
+
+    const data = await response.json();
+    setUrl(data.secure_url);
+    
+    setLoading(false);
 
     const response = await fetch('http://localhost:4000/work');
     const dataCombo = await response.json();
@@ -231,7 +259,7 @@ export default function EmployeeForm() {
                         hidden accept="image/*"
                         type="file"
                         name='profile_picture'
-                        onChange={handleChangeEmployee}
+                        onChange={handleChange}
                       />
                       <PhotoCamera />
                     </IconButton>
@@ -243,7 +271,7 @@ export default function EmployeeForm() {
                       <img
                         alt="Foto de perfil"
                         style={{ borderRadius: "100%", width: "9.5rem", height: "9rem" }}
-                        src={URL.createObjectURL(img)}
+                        src={url}
                       /> :
                       <img
                         alt="Foto perfil predeterminada"
@@ -282,7 +310,7 @@ export default function EmployeeForm() {
                       <img
                         alt="Foto documento de identidad"
                         style={{ width: "10rem", height: "7rem" }}
-                        src={URL.createObjectURL(imgID)}
+                        src={url}
                       /> :
                       <img
                         alt="Foto documento predeterminada"
@@ -297,7 +325,7 @@ export default function EmployeeForm() {
                   color='primary'
                   type='submit'
                   disabled={
-                    !employeeWork.price_hour || !employeeWork.description || !employee.profile_picture || !employee.photo_id
+                    !employeeWork.price_hour || !employeeWork.description
                   }
                   sx={{
                     display: "block",
