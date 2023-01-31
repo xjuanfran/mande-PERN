@@ -8,12 +8,14 @@ export default function ServiceList() {
         console.log(services);
     }
 
-    useEffect(() => {
-        loadServices();
-    }, [])
-    return(
-        <>
-            <h1>Services List</h1>
-        </>
-    )    
+
+        useEffect(() => {
+            loadServices();
+        }, [])
+        return(
+            <>
+                <h1>Services List</h1>
+            </>
+        )
+
 }
