@@ -15,6 +15,7 @@ export default function Login() {
     email: '',
     password: ''
   })
+  
   function encriptarPassword(password){
     return md5(password);
   }
@@ -87,7 +88,7 @@ export default function Login() {
                 </div>
                 <button type="submit" className="btn btn-primary btn-block">
                   {loading ? <div className="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <span className="visually-hidden">Loading...</span>
                   </div> : 'Iniciar sesion'}
                 </button>
                 <div className="sign-up">

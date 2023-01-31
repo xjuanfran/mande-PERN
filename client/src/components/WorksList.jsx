@@ -2,6 +2,7 @@ import React from 'react'
 import '../style-sheet/WorksList.css'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 export default function WorksList() {
 
@@ -15,7 +16,7 @@ export default function WorksList() {
   //console.log(idWork.idWork);
 
   var idUser = useParams();
-  //console.log(idUser.idPerson);
+  console.log(idUser.idPerson);
 
   const loadEmployeePic = async () => {
 
@@ -59,7 +60,6 @@ export default function WorksList() {
     setReview(review);
   }
 
-
   useEffect(() => {
     loadEmployeePic();
     loadEmployeeName();
@@ -67,7 +67,6 @@ export default function WorksList() {
     loadDistance();
     loadReview();
   }, [])
-
 
   function Card({ picture, nameEmployee, description, distance, review }) {
     return (
@@ -77,36 +76,51 @@ export default function WorksList() {
         <p className="card-text">{description}</p>
         <p className="card-text">{distance} Metros de distancia</p>
         <p className="card-text">{review} de calificacion</p>
-        <a href="/" className="btn btn-primary">Go somewhere</a>
+        <Link to={{ pathname: `/setPayMethod/${idUser.idPerson}` }} className="btn btn-primary btnContratar">Contratar</Link>
       </div>
 
     )
   }
 
   return (
-    <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
-          <Link className="navbar-brand" to="/">Mande</Link>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="/login">Iniciar sesion</a>
-              </li>
-            </ul>
+    <HelmetProvider>
+      <Helmet>
+        <style>{'body { background-color: #003748; }'}</style>
+      </Helmet>
+      <div>
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <div className="container-fluid">
+            <Link className="navbar-brand" to={{ pathname: `/${idUser.idPerson}` }}>Mande</Link>
+            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              </ul>
+              <ul className="navbar-nav">
+                <li className="nav-item dropdown">
+                  <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Perfil
+                  </a>
+                  <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li><a className="dropdown-item" href="/">Action</a></li>
+                    <li><Link className="dropdown-item" to={{ pathname: `/setPayMethod/${idUser.idPerson}` }}>Modificar método de pago</Link></li>
+                    <li><a className="dropdown-item" href="/">Cerrar sesion</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <div className="album py-5 bg-#003748 positionCard">
+          <div className="card-container text-dark">
+            {description.map((description, i) => (
+              <Card key={i} picture={picture[i]} nameEmployee={nameEmployee[i]} description={description} distance={distance[i]} review={review[i]} />
+            ))}
           </div>
         </div>
-      </nav>
-      <div className="album py-5 bg-light positionCard">
-        <div className="card-container">
-          {description.map((description, i) => (
-            <Card key={i} picture={picture[i]} nameEmployee={nameEmployee[i]} description={description} distance={distance[i]} review={review[i]} />
-          ))}
-        </div>
       </div>
-    </div>
+    </HelmetProvider>
+
   )
 }

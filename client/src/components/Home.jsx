@@ -1,5 +1,4 @@
 import React from 'react'
-import { Button } from '@mui/material'
 import { HelmetProvider, Helmet } from 'react-helmet-async'
 import '../style-sheet/Home.css'
 import git from '../images/git.png'
@@ -24,7 +23,7 @@ export default function Home() {
   }, [])
 
   const idPerson = useParams();
-  console.log(idPerson.id);
+  console.log(idPerson);
 
   return (
     <HelmetProvider>
@@ -39,9 +38,6 @@ export default function Home() {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="/login">Iniciar sesion</a>
-            </li>
           </ul>
           <ul className="navbar-nav">
             <li className="nav-item dropdown">
@@ -65,43 +61,12 @@ export default function Home() {
             Mande, es una aplicación web que permite, desde tu dispositivo, conseguir que personas trabajadoras, expertas y honestas realicen las tareas del día a día en casa.
           </p>
         </div>
-        <div className="buttons">
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: '#29323d',
-              height: '3rem',
-              alignItems: 'center',
-            }}
-            sx={{ width: '10rem', textAlign: 'center' }}
-            onClick={() => {
-              window.location.href = '/person/new'
-            }}
-          >
-            Registrate
-          </Button>
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: '#fff',
-              color: '#29323d',
-              height: '3rem',
-              alignItems: 'center',
-            }}
-            sx={{ width: '10rem', textAlign: 'center', marginLeft: '1rem' }}
-            onClick={() => {
-              window.location.href = '/login'
-            }}
-          >
-            Inciar sesión
-          </Button>
-        </div>
       </div>
       <div className="jobsSection">
         <h1 className="titleJobs">Servicios ofrecidos en nuestra pagina</h1>
         <div className='containerListW'>
           {work.map((work) => (
-            <Link  to={{pathname: `/workslist/${work.work_id}`}} key={work.work_id}><h2 className="worksList">{work.names}</h2></Link>
+            <Link  to={{pathname: `/workslist/${work.work_id}/${idPerson.id}`}} key={work.work_id}><h2 className="worksList">{work.names}</h2></Link>
           ))
           }
         </div>
