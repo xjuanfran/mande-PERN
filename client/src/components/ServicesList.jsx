@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
 
 export default function ServiceList() {
 
+    var idUser = useParams();
+
     const [services, setServices] = useState([]);
 
-    const loadServices = async () => {
-
-        const response = await fetch('http://localhost:4000/service/record/31');
+    const loadServices = async () => {      
+        const response = await fetch(`http://localhost:4000/service/record/${idUser.id}`);
         const data = await response.json();
         setServices(data);
     }
@@ -26,13 +28,34 @@ export default function ServiceList() {
                         backgroundColor: 'lightblue'
                     }}>
                         <CardContent>
-                            <Typography>Id del servicio: {service.service_id}</Typography>
-                            <Typography>Horas: {service.hours}</Typography>
-                            <Typography>Estatus calificación: {service.status_rating}</Typography>
-                            <Typography>Nombre: {service.name}</Typography>
-                            <Typography>Descripción: {service.description}</Typography>
-                            <Typography>Total del pago: {service.total_payment}</Typography>
-                            <Typography>Fecha de pago: {service.pay_date}</Typography>
+                            <h1 style={{display: "flex"}}>
+                            <Typography style={{fontWeight: "bold"}}>Id del servicio: </Typography>
+                            <Typography>{service.service_id}</Typography>
+                            </h1>
+                            <h1 style={{display: "flex"}}>
+                            <Typography style={{fontWeight: "bold"}}>Horas:</Typography>
+                            <Typography> {service.hours}</Typography>
+                            </h1>
+                            <h1 style={{display: "flex"}}>
+                            <Typography style={{fontWeight: "bold"}}>Estatus de calificación: </Typography>
+                            <Typography>{service.status_rating}</Typography>
+                            </h1>
+                            <h1 style={{display: "flex"}}>
+                            <Typography style={{fontWeight: "bold"}}>Nombre:</Typography>
+                            <Typography>{ service.name}</Typography>
+                            </h1>
+                            <h1 style={{display: "flex"}}>
+                            <Typography style={{fontWeight: "bold"}}>Descripción: </Typography>
+                            <Typography> {service.description}</Typography>
+                            </h1>
+                            <h1 style={{display: "flex"}}>
+                            <Typography style={{fontWeight: "bold"}}>Total del pago:</Typography>
+                            <Typography> {service.total_payment}</Typography>
+                            </h1>
+                            <h1 style={{display: "flex"}}>
+                            <Typography style={{fontWeight: "bold"}}>Fecha de pago: </Typography>
+                            <Typography> {service.pay_date}</Typography>
+                            </h1>
                         </CardContent>
                     </Card>
                 ))
