@@ -45,7 +45,7 @@ export default function Home() {
                 Perfil
               </a>
               <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a className="dropdown-item" href="/">Action</a></li>
+                <li><Link className="dropdown-item" to={{pathname: `/service/record/${idPerson.id}`}}>Historial de servicios</Link></li>
                 <li><Link className="dropdown-item" to={{pathname: `/setPayMethod/${idPerson.id}`}}>Modificar método de pago</Link></li>
                 <li><a className="dropdown-item" href="/">Cerrar sesion</a></li>
               </ul>

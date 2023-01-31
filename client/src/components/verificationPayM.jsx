@@ -66,15 +66,12 @@ return (
     </Helmet>
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
-        <Link className="navbar-brand" to={{ pathname: `/${idPerson.id}` }}>Mande</Link>
+        <Link className="navbar-brand" to={{pathname: `/${idPerson.id}`}}>Mande</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="/person/new">Iniciar sesion</a>
-            </li>
           </ul>
           <ul className="navbar-nav">
             <li className="nav-item dropdown">
@@ -82,8 +79,8 @@ return (
                 Perfil
               </a>
               <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a className="dropdown-item" href="/">Servicios</a></li>
-                <li><Link className="dropdown-item" to={{ pathname: `/setPayMethod/${idPerson.id}` }}>Modificar método de pago</Link></li>
+                <li><Link className="dropdown-item" to={{pathname: `/service/record/${idPerson.id}`}}>Historial de servicios</Link></li>
+                <li><Link className="dropdown-item" to={{pathname: `/setPayMethod/${idPerson.id}`}}>Modificar método de pago</Link></li>
                 <li><a className="dropdown-item" href="/">Cerrar sesion</a></li>
               </ul>
             </li>
