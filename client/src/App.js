@@ -9,6 +9,7 @@ import Login from './components/Login'
 import WorksList from './components/WorksList'
 import SetPaymethod from './components/ModifyPaymentMethod'
 import HomeVisit from './components/HomeVisit'
+import ServicesList from './components/ServicesList';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path='/setPayMethod/:id' element={<SetPaymethod />} />
         <Route path='/' element={<HomeVisit />} />
+        <Route path='/service' element={<ServicesList />} />
         {/* <Route path="/person" element={<PersonList />} /> */}
         {/*mising route edit person*/}
         {/*mising route edit client*/}
