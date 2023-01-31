@@ -31,7 +31,7 @@ const getserviceRecord = async (req, res, next) => {
         "THEN 'No calificaste este servicio' ELSE 'Servicio calificado' END status_rating, " +
         "P.first_name || ' ' || P.last_name AS name, CASE WHEN S.status = 'N' THEN 'Servicio cancelado' " +
         "ELSE 'Servicio completado' END status, S.description, W.names, CASE WHEN Pa.status = 'N' " +
-        "THEN 'Pendiente por pagar' ELSE 'Pagado' END statusPay " +
+        "THEN 'Pendiente por pagar' ELSE 'Pagado' END statusPay, Pa.total_payment,  Pa.pay_date AS pay_date " +
         "FROM service S INNER JOIN works W ON S.work_id = W.work_id INNER JOIN EMPLOYEE E " +
         "ON S.employee_id = E.employee_id INNER JOIN person P ON E.employee_id = P.person_id " +
         "left JOIN pay Pa ON S.service_id = Pa.service_id WHERE S.user_id = $1", [id]);
