@@ -10,7 +10,7 @@ export default function EmployeeList() {
   const [employee, setEmployee] = useState([])
 
   const loadInfoEmployee = async () => {
-    const response = await fetch("http://localhost:4000/work/getAllMyWorks/31")
+    const response = await fetch(`http://localhost:4000/work/getAllMyWorks/${idPerson.id}`)
     const data = await response.json()
     //console.log(data)
     setEmployee(data)
