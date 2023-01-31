@@ -11,6 +11,7 @@ import SetPaymethod from './components/ModifyPaymentMethod'
 import HomeVisit from './components/HomeVisit'
 import ServicesList from './components/ServicesList';
 import VerificationPayM from './components/VerificationPayM'
+// import ModifyPaymentMethod from './components/ModifyPaymentMethod';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
         <Route path='/setPayMethod/:id' element={<SetPaymethod />} />
         <Route path='/' element={<HomeVisit />} />
         <Route path='/service/record/:id' element={<ServicesList />} />
+        <Route path='/verificationPayM/:id' element={<VerificationPayM />} />
         <Route path='/verificationPayM/:id' element={<VerificationPayM />} />
         {/* <Route path="/person" element={<PersonList />} /> */}
         {/*mising route edit person*/}
