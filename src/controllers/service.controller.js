@@ -24,6 +24,27 @@ const getservice = async (req, res, next) => {
     }
 }
 
+const getserviceRecord = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query("SELECT S.service_id, S.hours, CASE WHEN S.status_rating = 'N' " +
+        "THEN 'No calificaste este servicio' ELSE 'Servicio calificado' END status_rating, " +
+        "P.first_name || ' ' || P.last_name AS name, CASE WHEN S.status = 'N' THEN 'Servicio cancelado' " +
+        "ELSE 'Servicio completado' END status, S.description, W.names, CASE WHEN Pa.status = 'N' " +
+        "THEN 'Pendiente por pagar' ELSE 'Pagado' END statusPay " +
+        "FROM service S INNER JOIN works W ON S.work_id = W.work_id INNER JOIN EMPLOYEE E " +
+        "ON S.employee_id = E.employee_id INNER JOIN person P ON E.employee_id = P.person_id " +
+        "left JOIN pay Pa ON S.service_id = Pa.service_id WHERE S.user_id = $1", [id]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Este usuario no ha realizado ningun servicio' })
+        }
+        res.json(result.rows);
+    }
+    catch (error) {
+        next(error);
+    }
+}
+
 const createservice = async (req, res, next) => {
     const { hours, user_id, employee_id, description, work_id } = req.body;
 
@@ -69,6 +90,7 @@ const updateservice = async (req, res, next) => {
 module.exports = {
     getAllservice,
     getservice,
+    getserviceRecord,
     createservice,
     deleteservice,
     updateservice
