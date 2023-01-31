@@ -31,6 +31,8 @@ export default function ServiceList() {
                             <Typography>Estatus calificación: {service.status_rating}</Typography>
                             <Typography>Nombre: {service.name}</Typography>
                             <Typography>Descripción: {service.description}</Typography>
+                            <Typography>Total del pago: {service.total_payment}</Typography>
+                            <Typography>Fecha de pago: {service.pay_date}</Typography>
                         </CardContent>
                     </Card>
                 ))
