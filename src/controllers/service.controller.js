@@ -25,10 +25,10 @@ const getservice = async (req, res, next) => {
 }
 
 const createservice = async (req, res, next) => {
-    const { hours, user_id, employee_id } = req.body;
+    const { hours, user_id, employee_id, description, work_id } = req.body;
 
     try {
-        const result = await pool.query("INSERT INTO service (hours, status_rating, user_id, employee_id, status) VALUES ($1, 'N', $2, $3, 'P') RETURNING *", [hours, user_id, employee_id]);
+        const result = await pool.query("INSERT INTO service (hours, status_rating, user_id, employee_id, status, description, work_id) VALUES ($1, 'N', $2, $3, 'Y', $4, $5) RETURNING *", [hours, user_id, employee_id, description, work_id]);
         res.json(result.rows[0]);
     }
     catch (error) {
@@ -53,9 +53,9 @@ const deleteservice = async (req, res, next) => {
 
 const updateservice = async (req, res, next) => {
     const { id } = req.params;
-    const { hours, status_rating, user_id, employee_id } = req.body;
+    const { hours, status_rating, user_id, employee_id, description } = req.body;
     try{
-        const result = await pool.query("UPDATE service SET hours = $1, status_rating = $2, user_id = $3, employee_id = $4 WHERE service_id = $5 RETURNING *", [hours, status_rating, user_id, employee_id, id]);
+        const result = await pool.query("UPDATE service SET hours = $1, status_rating = $2, user_id = $3, employee_id = $4, description = $5 WHERE service_id = $6 RETURNING *", [hours, status_rating, user_id, employee_id, description, id]);
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'No existe el servicio' })
         }

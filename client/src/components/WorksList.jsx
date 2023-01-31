@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import '../style-sheet/WorksList.css'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
@@ -18,7 +18,7 @@ export default function WorksList() {
   var idUser = useParams();
   console.log(idUser.idPerson);
 
-  const loadEmployeePic = async () => {
+  const loadEmployeePic = useCallback(async () => {
 
     const employeeResponse = await fetch(`http://localhost:4000/employee/Allwork/${idWork.idWork}/${idUser.idPerson}`);
     console.log(`http://localhost:4000/employee/Allwork/${idWork.idWork}/${idUser.idPerson}`)
@@ -26,15 +26,17 @@ export default function WorksList() {
     const employeePic = await employeeData.map((employeeData) => (employeeData.profile_picture));
     console.log(employeePic);
     setPicture(employeePic);
-  }
+  })
 
-  const loadEmployeeName = async () => {
-    const nameResponse = await fetch(`http://localhost:4000/employee/Allwork/${idWork.idWork}/${idUser.idPerson}`);
-    const nameData = await nameResponse.json();
-    const name = await nameData.map((nameData) => (nameData.first_name + " " + nameData.last_name));
-    console.log(name);
-    setNameEmployee(name);
-  }
+  const loadEmployeeName = useCallback(
+    async () => {
+      const nameResponse = await fetch(`http://localhost:4000/employee/Allwork/${idWork.idWork}/${idUser.idPerson}`);
+      const nameData = await nameResponse.json();
+      const name = await nameData.map((nameData) => (nameData.first_name + " " + nameData.last_name));
+      console.log(name);
+      setNameEmployee(name);
+    }
+  ) 
 
   const loadWorkDescription = async () => {
     const descriptionResponse = await fetch(`http://localhost:4000/employee/Allwork/${idWork.idWork}/${idUser.idPerson}`);
@@ -66,7 +68,7 @@ export default function WorksList() {
     loadWorkDescription();
     loadDistance();
     loadReview();
-  }, [])
+  }, [loadEmployeePic, loadEmployeeName, loadWorkDescription, loadDistance, loadReview])
 
   function Card({ picture, nameEmployee, description, distance, review }) {
     return (
