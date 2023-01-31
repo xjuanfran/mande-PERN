@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, Typography } from '@mui/material';
 
-export default function serviceList() {
+export default function ServiceList() {
 
     const [services, setServices] = useState([]);
 
