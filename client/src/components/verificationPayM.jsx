@@ -40,14 +40,15 @@ export default function VerificationPayM() {
     setLoading(true);
 
     //console.log(dataCard);
+
     //console.log(dataCard.cvv);
     // console.log(dataCard.card_number);
-     console.log(encriptarPassword(dataCard.cvv));
-    // console.log(encriptarPassword(dataCard.card_number));
+    //console.log(encriptarPassword(dataCard.cvv));
+    //console.log(encriptarPassword(dataCard.card_number));
     dataCard.cvv = encriptarPassword(dataCard.cvv);
     dataCard.card_number = encriptarPassword(dataCard.card_number);
 
-    const response = await fetch(`http://localhost:4000/PayMethod/ValidationUser/${idPerson}/${dataCard.card_number}`);
+    const response = await fetch(`http://localhost:4000/PayMethod/ValidationUser/${idPerson.id}/${dataCard.card_number}`);
     const data = await response.json();
     console.log(data);
 
@@ -56,7 +57,7 @@ export default function VerificationPayM() {
   }
 
 const idPerson = useParams();
-//console.log(idPerson);
+//console.log(idPerson.id);
 
 return (
   <HelmetProvider>
