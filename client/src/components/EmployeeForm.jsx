@@ -83,7 +83,7 @@ export default function EmployeeForm() {
 
     e.preventDefault();
 
-    console.log(employee, employeeWork);
+    //onsole.log(employee, employeeWork);
 
     setLoading(true);
 
@@ -125,9 +125,13 @@ export default function EmployeeForm() {
      let img = dataClaudinary.secure_url;
 
      const completeEmployee = {
+      employee_id: params.id,
       photo_id: employee.photo_id,
       profile_picture: img
-    }
+    
+   }
+
+   console.log(completeEmployee)
 
     const employeeData = await fetch('http://localhost:4000/employee/', {
       method: 'POST',
