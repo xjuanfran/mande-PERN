@@ -98,7 +98,7 @@ const updatePayMethod = async (req, res, next) => {
     const { cvv, card_number, card_type, expiration_date } = req.body;
 
     const result = await pool.query(
-      'UPDATE payment_method SET cvv = $1, card_number = $2, card_type = $3, expiration_date = $4 WHERE payment_id = $5 RETURNING *', [cvv, card_number, card_type, expiration_date, id]
+      'UPDATE payment_method SET cvv = $1, card_number = $2, card_type = $3, expiration_date = $4 WHERE user_id = $5 RETURNING *', [cvv, card_number, card_type, expiration_date, id]
     );
 
     if (result.rows.length === 0) {

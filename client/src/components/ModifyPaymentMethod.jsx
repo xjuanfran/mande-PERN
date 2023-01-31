@@ -55,7 +55,7 @@ export default function InputAdornments() {
 
     console.log(dataCard);
 
-    const response = await fetch(`http://localhost:4000/PayMethod/Validation/`, {
+    const response = await fetch(`http://localhost:4000/PayMethod/${idPerson.id}`, {
       method: 'PUT',
       body: JSON.stringify(dataCard),
       headers: {
