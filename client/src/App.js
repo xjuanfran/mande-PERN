@@ -24,7 +24,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path='/setPayMethod/:id' element={<SetPaymethod />} />
         <Route path='/' element={<HomeVisit />} />
-        <Route path='/service' element={<ServicesList />} />
+        <Route path='/service/record/:id' element={<ServicesList />} />
         <Route path='/verificationPayM/:id' element={<VerificationPayM />} />
         {/* <Route path="/person" element={<PersonList />} /> */}
         {/*mising route edit person*/}
