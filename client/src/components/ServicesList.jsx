@@ -28,6 +28,7 @@ export default function serviceList() {
                         <CardContent>
                             <Typography>{service.service_id}</Typography>
                             <Typography>{service.description}</Typography>
+                            <Typography>{service.description}</Typography>
                         </CardContent>
                     </Card>
                 ))
