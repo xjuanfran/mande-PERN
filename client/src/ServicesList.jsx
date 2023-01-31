@@ -7,7 +7,7 @@ export default function serviceList() {
 
     const loadServices = async () => {
 
-        const response = await fetch('http://localhost:4000/service');
+        const response = await fetch('http://localhost:4000/service/record/31');
         const data = await response.json();
         setServices(data);
     }
@@ -26,9 +26,11 @@ export default function serviceList() {
                         backgroundColor: 'lightblue'
                     }}>
                         <CardContent>
-                            <Typography>{service.service_id}</Typography>
-                            <Typography>{service.description}</Typography>
-                            <Typography>{service.description}</Typography>
+                            <Typography>Id del servicio: {service.service_id}</Typography>
+                            <Typography>Horas: {service.hours}</Typography>
+                            <Typography>Estatus calificación: {service.status_rating}</Typography>
+                            <Typography>Nombre: {service.name}</Typography>
+                            <Typography>Descripción: {service.description}</Typography>
                         </CardContent>
                     </Card>
                 ))
