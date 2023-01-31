@@ -1,18 +1,30 @@
 import React from 'react'
-import { Card, CardContent, TextField, Typography, Grid } from "@mui/material";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
-import { FormControl, InputLabel, OutlinedInput } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import InputAdornment from '@mui/material/InputAdornment';
-
+import { FormControl, InputLabel, OutlinedInput } from "@mui/material";
+import { Card, CardContent, TextField, Typography, Grid, Button, CircularProgress } from "@mui/material";
+import md5 from 'md5';
 
 
 export default function VerificationPayM() {
 
   const [loading, setLoading] = useState(false);
+
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  function encriptarPassword(password){
+    return md5(password);
+  }
 
   const [dataCard, setDataCard] = useState({
     cvv: '',
@@ -26,8 +38,10 @@ export default function VerificationPayM() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(dataCard.cvv);
-    console.log(dataCard.card_number);
+    // console.log(dataCard.cvv);
+    // console.log(dataCard.card_number);
+    console.log(encriptarPassword(dataCard.cvv));
+    console.log(encriptarPassword(dataCard.card_number));
 
     setLoading(true);
 
@@ -35,7 +49,7 @@ export default function VerificationPayM() {
   }
 
   const idPerson = useParams();
-  console.log(idPerson);
+  //console.log(idPerson);
 
   return (
     <HelmetProvider>
@@ -138,7 +152,7 @@ export default function VerificationPayM() {
                   type="submit"
                   disabled=
                   {
-                    !dataCard.cvv || dataCard.card_number.length > 3 || dataCard.card_number.length < 3
+                    !dataCard.cvv || dataCard.cvv.length > 3 || dataCard.cvv.length < 3
                   }
                   sx={{
                     display: "block",
@@ -151,7 +165,7 @@ export default function VerificationPayM() {
                     marginTop: "1rem",
                   }}
                 >
-                  {loading ? <CircularProgress color="inherit" size={14} /> : "Actualizar"}
+                  {loading ? <CircularProgress color="inherit" size={14} /> : "Verificar"}
                 </Button>
               </form>
             </CardContent>

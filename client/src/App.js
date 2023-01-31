@@ -10,7 +10,7 @@ import WorksList from './components/WorksList'
 import SetPaymethod from './components/ModifyPaymentMethod'
 import HomeVisit from './components/HomeVisit'
 import ServicesList from './components/ServicesList';
-import VerificationPayM from './components/verificationPayM'
+import VerificationPayM from './components/VerificationPayM'
 
 export default function App() {
   return (
