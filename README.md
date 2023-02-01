@@ -19,3 +19,5 @@ Then run the backend of the project please install the necessary dependencies fo
 The last step to run the complete project with UI, please change to the directory named 'client'.
 
 In this repository there is the 'client' directory please open it and you will find a Readme where there will be a guide to execute the UI
+
+Las variables de entorno para hacer la conexion a la bases de datos  se encuentran en el informe final del proyceto
