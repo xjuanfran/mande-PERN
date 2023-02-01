@@ -75,6 +75,7 @@ CREATE TABLE employees_work (
     employee_id INT,
     work_id INT,
     price_hour INT NOT NULL,
+    description VARCHAR(255),
     status VARCHAR(2),
     CONSTRAINT pk_employees_work
     PRIMARY KEY (employee_id, work_id),

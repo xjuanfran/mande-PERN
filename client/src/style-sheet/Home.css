@@ -1,0 +1,182 @@
+.mainHome {
+    background-image: url("../images/fondoLogin.png");
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
+.about {
+    background-image: url("../images/fondoLogin.png");
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 10%;
+}
+
+.titleHome {
+    font-size: 50px;
+    font-weight: bold;
+    font-family: 'open sans', sans-serif;
+    color: #460e56;
+    text-align: center;
+    padding-top: 8%;
+}
+
+.textAbout {
+    font-size: 170%;
+    font-family: sans-serif;
+    color: #232323;
+    text-align: justify;
+    padding-top: 10%;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.buttons {
+    text-align: center;
+    padding-top: 5%;
+}
+
+.jobsSection {
+    background-color: #f7f6f6;
+    height: 80vh;
+}
+
+.titleJobs {
+    font-size: 50px;
+    font-weight: bold;
+    font-family: 'open sans', sans-serif;
+    color: #460e56;
+    text-align: center;
+    padding-top: 2%;
+    margin-bottom: 8%;
+}
+
+.footer-distributed {
+    background-color: #292c2f;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+    width: 100%;
+    text-align: left;
+    font: normal 16px sans-serif;
+    padding: 45px 50px;
+}
+
+.footer-distributed .footer-left p {
+    color: #8f9296;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Footer links */
+
+.footer-distributed p.footer-links {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0 0 10px;
+    padding: 0;
+    transition: ease .25s;
+}
+
+.footer-distributed p.footer-links a {
+    display: inline-block;
+    line-height: 1.8;
+    text-decoration: none;
+    color: inherit;
+    transition: ease .25s;
+}
+
+.footer-distributed .footer-links a:before {
+    content: "·";
+    font-size: 20px;
+    left: 0;
+    color: #fff;
+    display: inline-block;
+    padding-right: 5px;
+}
+
+.footer-distributed .footer-links .link-1:before {
+    content: none;
+}
+
+.footer-distributed .footer-right {
+    float: right;
+    margin-top: 6px;
+    max-width: 180px;
+}
+
+.footer-distributed .footer-right a {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background-color: #33383b;
+    border-radius: 2px;
+    font-size: 20px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 35px;
+    margin-left: 3px;
+    transition: all .25s;
+}
+
+.footer-distributed .footer-right a:hover {
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+}
+
+.footer-distributed p.footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* Media Queries */
+
+@media (max-width: 600px) {
+
+    .footer-distributed .footer-left,
+    .footer-distributed .footer-right {
+        text-align: center;
+    }
+
+    .footer-distributed .footer-right {
+        float: none;
+        margin: 0 auto 20px;
+    }
+
+    .footer-distributed .footer-left p.footer-links {
+        line-height: 1.8;
+    }
+}
+
+.git {
+    height: 4.5rem;
+}
+
+.logoInstragram {
+    height: 2rem;
+}
+
+.faceLogo {
+    height: 3rem;
+    margin-right: 1rem;
+}
+
+.cssFooter {
+    background-color: #003748;
+    height: 20vh;
+}
+
+.containerListW {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding-left: 10%;
+}
+
+.worksList {
+    background-color: #f7f6f6;
+    width: 10%;
+    display: inline;
+    text-align: justify;
+    margin-left: 5%;
+    padding-bottom: 10%;
+}

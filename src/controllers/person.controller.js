@@ -1,5 +1,6 @@
 const pool = require('../db');
 
+//Devuelve todos los registros de employees en estado Y
 const getAllPerson = async (req, res, next) => {
 
   try {
@@ -10,6 +11,7 @@ const getAllPerson = async (req, res, next) => {
   }
 };
 
+//Devuelve un registro especifico de employee en estado Y
 const getPerson = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -25,6 +27,7 @@ const getPerson = async (req, res, next) => {
   }
 }
 
+//crea un registro de employee
 const createPerson = async (req, res, next) => {
   const { first_name, last_name, email, phone, password } = req.body;
 
@@ -37,6 +40,7 @@ const createPerson = async (req, res, next) => {
   }
 }
 
+//Valida si el email o el telefono ya existen en la base de datos
 const personValidation = async (req, res, next) => {
   const { email, phone } = req.body;
 
@@ -52,6 +56,7 @@ const personValidation = async (req, res, next) => {
   }
 }
 
+//Valida si el usuario ya existe en la base de datos
 const loginPerson = async (req, res, next) => {
   const { email, password } = req.body;
   try {
@@ -65,6 +70,7 @@ const loginPerson = async (req, res, next) => {
   }
 }
 
+//Elimina un registro de employee
 const deletePerson = async (req, res, next) => {
 
   const { id } = req.params;
@@ -80,6 +86,7 @@ const deletePerson = async (req, res, next) => {
   }
 }
 
+//Actualiza un registro de employee
 const updatePerson = async (req, res, next) => {
 
   try {

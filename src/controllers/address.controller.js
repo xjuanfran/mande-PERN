@@ -44,9 +44,18 @@ const getUserAddress = async (req, res, next) => {
 
 //crea un registro de address
 const createAddress = async (req, res, next) => {
-  const { latitude, longitude, person_id } = req.body;
+  const { description, person_id } = req.body;
+
   try {
-    const result = await pool.query("INSERT INTO address (latitude, longitude, person_id, status) VALUES ($1, $2, $3, 'Y') RETURNING *", [latitude, longitude, person_id]);
+
+    //Obtiene las coordenadas de la dirección
+    const geo = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${description}`);
+    const data = await geo.json();
+    let coordenates = data[0].lon + " " + data[0].lat;
+    //Aqui termina la obtención de las coordenadas
+
+    //Comienza la inserción de los datos
+    const result = await pool.query("INSERT INTO address (description, person_id, status, coordenates) VALUES ($1, $2, 'Y', ST_GeomFromText('POINT(" + coordenates + ")', 4326)) RETURNING *", [description, person_id]);
     res.json(result.rows[0]);
   } catch (error) {
     next(error);
@@ -72,10 +81,16 @@ const deleteAddress = async (req, res, next) => {
 const updateAddress = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { latitude, longitude, person_id } = req.body;
+    const { description } = req.body;
 
-    const result = await pool.query(
-      'UPDATE address SET latitude = $1, longitude = $2, person_id = $3 WHERE address_id = $4 RETURNING *', [latitude, longitude, person_id, id]
+    //Obtiene las coordenadas de la dirección
+    const geo = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${description}`);
+    const data = await geo.json();
+    let coordenates = data[0].lon + " " + data[0].lat;
+    //Aqui termina la obtención de las coordenadas
+
+    const result = await pool.query(   
+      "UPDATE address SET description = $1, coordenates = ST_GeomFromText('POINT(" + coordenates + ")', 4326) WHERE address_id = $2 RETURNING *", [description, id]
     );
 
     if (result.rows.length === 0) {

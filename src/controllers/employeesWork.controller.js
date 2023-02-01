@@ -28,10 +28,10 @@ const getEmployeesWork = async (req, res, next) => {
 
 //crea un registro de employeesWork
 const createEmployeesWork = async (req, res, next) => {
-  const { employee_id, work_id, price_hour } = req.body;
+  const { employee_id, work_id, price_hour, description } = req.body;
 
   try {
-    const result = await pool.query("INSERT INTO employees_work ( employee_id, work_id, price_hour, status) VALUES ($1, $2, $3, 'Y') RETURNING *", [employee_id, work_id, price_hour]);
+    const result = await pool.query("INSERT INTO employees_work ( employee_id, work_id, price_hour, status, description) VALUES ($1, $2, $3, 'Y', $4) RETURNING *", [employee_id, work_id, price_hour, description]);
 
     res.json(result.rows[0]);
   } catch (error) {
@@ -55,14 +55,30 @@ const deleteEmployeesWork = async (req, res, next) => {
   }
 }
 
+//Activa un registro de employeesWork poniendo su status en Y
+const activeEmployeesWork = async (req, res, next) => {
+  try {
+    const { emp_id, w_id } = req.params;
+
+    const result = await pool.query("UPDATE employees_work SET status = 'Y' WHERE employee_id = $1 AND work_id = $2 RETURNING *", [emp_id, w_id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'El trabajador nunca a tenido este trabajo' });
+    }
+    res.json(result.rows[0]);
+  } catch (error) {
+    next(error);
+  }
+}
+
 //Actualiza un registro de employeesWork
 const updateEmployeesWork = async (req, res, next) => {
   try {
     const { emp_id, w_id } = req.params;
-    const { employee_id, work_id, price_hour } = req.body;
+    const { price_hour, description } = req.body;
 
     const result = await pool.query(
-      'UPDATE employees_work SET employee_id = $1, work_id = $2, price_hour = $3 WHERE employee_id = $4 AND work_id = $5 RETURNING *', [employee_id, work_id, price_hour, emp_id, w_id]
+      'UPDATE employees_work SET price_hour = $1, description = $2 WHERE employee_id = $3 AND work_id = $4 RETURNING *', [price_hour, description, emp_id, w_id]
     );
 
     if (result.rows.length === 0) {
@@ -79,5 +95,6 @@ module.exports = {
   getEmployeesWork,
   createEmployeesWork,
   deleteEmployeesWork,
+  activeEmployeesWork,
   updateEmployeesWork
 }

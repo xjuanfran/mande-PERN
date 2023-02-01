@@ -4,9 +4,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+Remember to run the following commands in the 'client' folder
+
 In the project directory, you can run:
 
-### `npm start`
+Before executing the UI of the project, please install the necessary dependencies for its correct execution with the following command:
+
+### `npm i --force`
+
+when you have the dependencies downloaded you can run ### `npm start` to start the UI hosted on port 3000
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.

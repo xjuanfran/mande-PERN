@@ -1,4 +1,4 @@
-import { Card, Grid, Typography, CardContent, TextField } from '@mui/material'
+import { Card, Grid, Typography, CardContent, TextField, Button, CircularProgress } from '@mui/material'
 import React from 'react'
 import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { useEffect, useState } from 'react'
@@ -7,37 +7,40 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera'
 import avatar from '../images/avatar.png'
 import avatarID from '../images/avatarID.png'
 import { Autocomplete } from '@mui/material'
+import { useParams, useNavigate } from 'react-router-dom';
 
-//array of options for employee type
-// const employeeOptions = [fetch('http://localhost:4000/work')];
 
 export default function EmployeeForm() {
 
+  const navigate = useNavigate();
+
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [url, setUrl] = useState("");
+
+  //to fill combobox type of works with data from database
   const [work, setWork] = useState([]);
 
   const loadWork = async () => {
     const response = await fetch('http://localhost:4000/work');
     const data = await response.json();
     setWork(data);
+    //console.log(data);
   }
 
   useEffect(() => {
     loadWork();
-  }, [work])
+  }, [])
 
   //state for img
   const [img, setImg] = useState(null);
   const [imgID, setImgID] = useState(null);
 
-  //handle change for imgID
-  const handleChangeImgID = (e) => {
-
-    setEmployee({ ...employee, [e.target.name]: e.target.value })
-    setImgID(e.target.files[0])
-  }
+  const params = useParams();
 
   //state for employee  
   const [employee, setEmployee] = useState({
+    employee_id: params.id,
     photo_id: '',
     profile_picture: ''
   })
@@ -49,6 +52,129 @@ export default function EmployeeForm() {
     setImg(e.target.files[0])
   }
 
+  //handle change for imgID
+  const handleChangeImgID = (e) => {
+    setEmployee({ ...employee, [e.target.name]: e.target.value })
+    setImgID(e.target.files[0])
+  }
+
+  const handleChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const [works, setWorks] = useState({
+    work_id: '',
+    names: ''
+  })
+
+  const [employeeWork, setEmployeeWork] = useState({
+    employee_id: params.id,
+    work_id: '',
+    price_hour: '',
+    description: ''
+  })
+
+  const handleChangeEmployeeWork = (e) => {
+    setEmployeeWork({ ...employeeWork, [e.target.name]: e.target.value })
+  }
+
+  //handle submit for employee
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+
+    //onsole.log(employee, employeeWork);
+
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", "hbmwrpgt");
+    const responseClaudinary = await fetch(
+      "https://api.cloudinary.com/v1_1/dj48mc1gg/image/upload",
+      {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+      }
+    );
+
+    const dataClaudinary = await responseClaudinary.json();
+    console.log(dataClaudinary.secure_url);
+
+    const response = await fetch('http://localhost:4000/work');
+    const dataCombo = await response.json();
+    //let workId = data.map((work) => work.work_id);
+    //console.log(workId);
+    ///console.log(works.names)
+
+    for (let i = 0; i < dataCombo.length; i++) {
+      if (dataCombo[i].names === works.names) {
+        employeeWork.work_id = dataCombo[i].work_id;
+      }
+      if (works.names === null) {
+        setWorks({ ...works, work_id: '' })
+      }
+    }
+    //console.log(employee, employeeWork);
+
+     //Contruye el objeto completo para enviar a la tabla employee
+
+     let img = dataClaudinary.secure_url;
+
+     const completeEmployee = {
+      employee_id: params.id,
+      photo_id: employee.photo_id,
+      profile_picture: img
+    
+   }
+
+   console.log(completeEmployee)
+
+    const employeeData = await fetch('http://localhost:4000/employee/', {
+      method: 'POST',
+      body: JSON.stringify(completeEmployee),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const employeeDataJson = await employeeData.json();
+    console.log(employeeDataJson);
+
+    const employeeWorkData = await fetch('http://localhost:4000/employeesWork', {
+      method: 'POST',
+      body: JSON.stringify(employeeWork),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const employeeWorkDataJson = await employeeWorkData.json();
+    console.log(employeeWorkDataJson);
+
+    //construye el objeto review para crearlo en la base de datos
+
+    const reviewData = {
+      employee_id: employeeDataJson.employee_id,
+      total_jobs : 0,
+      rating: 0
+    }
+
+    const review = await fetch('http://localhost:4000/reviews', {
+      method: 'POST',
+      body: JSON.stringify(reviewData),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const reviewJson = await review.json();
+    console.log(reviewJson);
+
+    setLoading(false);
+    navigate('/');
+  }
 
   return (
     <HelmetProvider>
@@ -75,14 +201,14 @@ export default function EmployeeForm() {
             >
               Registro empleado
             </Typography>
-            <form>
+            <form onSubmit={handleSubmit}>
               <CardContent
                 sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
               >
                 <Autocomplete
                   disablePortal
                   options={Object.values(work.map((work) => work.names))}
-                  //onChange={(event, newValue) => { setPayM({ ...payM, cardType: newValue }) }}
+                  onChange={(event, newValue) => { setWorks({ ...works, names: newValue }) }}
                   sx={{
                     display: "block",
                     margin: " 0rem 0",
@@ -102,10 +228,26 @@ export default function EmployeeForm() {
                     margin: "-.8rem 0",
                   }}
                   style={{ width: "80%" }}
+                  name="price_hour"
+                  onChange={handleChangeEmployeeWork}
                 />
                 <CardContent
                   sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
                 >
+                  <TextField
+                    variant="outlined"
+                    label="Descripcion trabajo"
+                    multiline
+                    rows={4}
+                    sx={{
+                      display: "block",
+                      margin: ".9rem 0",
+                    }}
+                    style={{ width: "93%" }}
+                    name="description"
+                    onChange={handleChangeEmployeeWork}
+
+                  />
                   <Stack
                     direction="row"
                     alignItems="center"
@@ -125,7 +267,7 @@ export default function EmployeeForm() {
                         hidden accept="image/*"
                         type="file"
                         name='profile_picture'
-                        onChange={handleChangeEmployee}
+                        onChange={handleChange}
                       />
                       <PhotoCamera />
                     </IconButton>
@@ -137,7 +279,7 @@ export default function EmployeeForm() {
                       <img
                         alt="Foto de perfil"
                         style={{ borderRadius: "100%", width: "9.5rem", height: "9rem" }}
-                        src={URL.createObjectURL(img)}
+                        src={url}
                       /> :
                       <img
                         alt="Foto perfil predeterminada"
@@ -163,7 +305,7 @@ export default function EmployeeForm() {
                       <input
                         hidden accept="image/*"
                         type="file"
-                        name='profile_picture'
+                        name='photo_id'
                         onChange={handleChangeImgID}
                       />
                       <PhotoCamera />
@@ -176,7 +318,7 @@ export default function EmployeeForm() {
                       <img
                         alt="Foto documento de identidad"
                         style={{ width: "10rem", height: "7rem" }}
-                        src={URL.createObjectURL(imgID)}
+                        src={url}
                       /> :
                       <img
                         alt="Foto documento predeterminada"
@@ -186,6 +328,26 @@ export default function EmployeeForm() {
                     }
                   </div>
                 </CardContent>
+                <Button
+                  variant='contained'
+                  color='primary'
+                  type='submit'
+                  disabled={
+                    !employeeWork.price_hour || !employeeWork.description
+                  }
+                  sx={{
+                    display: "block",
+                    margin: ".5rem 0"
+                  }}
+                  style={{
+                    color: "white",
+                    width: "70%",
+                    margin: "0 auto",
+                    marginTop: "1rem"
+                  }}
+                >
+                  {loading ? <CircularProgress color="inherit" /> : "Registrar"}
+                </Button>
               </CardContent>
             </form>
           </Card>

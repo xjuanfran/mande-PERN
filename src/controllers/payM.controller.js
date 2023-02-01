@@ -49,6 +49,33 @@ const getPayMethodPerson = async (req, res, next) => {
   }
 }
 
+//
+const getPayMethodValidation = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query("SELECT * FROM payment_method WHERE card_number = $1 AND status = 'Y'", [id])
+    if (result.rows.length > 0) {
+      return res.json({ message: true });
+    }
+    return res.json({ message: false });
+  } catch (error) {
+    next(error);
+  }
+}
+
+const getPayMethodValidationUser = async (req, res, next) => {
+  try {
+    const { id, card } = req.params;
+    const result = await pool.query("SELECT * FROM payment_method WHERE user_id = $1 AND card_number = $2 AND status = 'Y'", [id, card]);
+    if (result.rows.length > 0) {
+      return res.json({ message: true });
+    }
+    return res.json({ message: false });
+  } catch (error) {
+    next(error);
+  }
+}
+
 const deletePayMethod = async (req, res, next) => {
 
   const { id } = req.params;
@@ -71,7 +98,7 @@ const updatePayMethod = async (req, res, next) => {
     const { cvv, card_number, card_type, expiration_date } = req.body;
 
     const result = await pool.query(
-      'UPDATE payment_method SET cvv = $1, card_number = $2, card_type = $3, expiration_date = $4 WHERE payment_id = $5 RETURNING *', [cvv, card_number, card_type, expiration_date, id]
+      'UPDATE payment_method SET cvv = $1, card_number = $2, card_type = $3, expiration_date = $4 WHERE user_id = $5 RETURNING *', [cvv, card_number, card_type, expiration_date, id]
     );
 
     if (result.rows.length === 0) {
@@ -88,6 +115,8 @@ module.exports = {
   getAllPayMethod,
   getPayMethod,
   getPayMethodPerson,
+  getPayMethodValidation,
+  getPayMethodValidationUser,
   createPayMethod,
   deletePayMethod,
   updatePayMethod

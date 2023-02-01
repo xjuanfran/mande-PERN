@@ -2,7 +2,6 @@ import 'date-fns';
 import React from 'react'
 import { useState } from 'react';
 import Stack from '@mui/material/Stack';
-import DateFnsUtils from '@date-io/date-fns';
 import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -13,8 +12,10 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import { Grid, Card, Typography, CardContent, TextField, Button } from '@mui/material'
+import { Grid, Typography, CardContent, TextField, Button, CircularProgress, Card } from '@mui/material'
+import { Link, useParams } from 'react-router-dom';
+import md5 from 'md5';
+import { useNavigate } from 'react-router-dom';
 
 
 //type of card, debit or credit
@@ -22,17 +23,61 @@ const cardOptions = ['Debito', 'Credito'];
 
 export default function ClientForm() {
 
+  const navigate = useNavigate();
+
   //state for img
   const [img, setImg] = useState(null);
 
+  //Hook to manage the loading state
+  const [loading, setLoading] = useState(false);
+
   //on submit form
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user, payM);
+
+    setLoading(true);
+
+    payM.cvv = encriptarMethodP(payM.cvv);
+    payM.card_number = encriptarMethodP(payM.card_number);
+    //console.log(payM);
+
+    const dataUser = await fetch('http://localhost:4000/user', {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const dataResultUser = await dataUser.json();
+    console.log(dataResultUser);
+
+    const dataValidation = await fetch(`http://localhost:4000/PayMethod/Validation/${payM.card_number}`);
+    const dataResultValidation = await dataValidation.json();
+
+    if (dataResultValidation.message === false) {
+      const dataPayM = await fetch('http://localhost:4000/PayMethod', {
+        method: 'POST',
+        body: JSON.stringify(payM),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const dataResultPayM = await dataPayM.json();
+      console.log(dataResultPayM);
+    } else {
+      alert("El metodo de pago ya existe");
+    }
+
+    setLoading(false);
+    navigate('/');
+    
   }
+
+  const params = useParams();
 
   //state for user
   const [user, setUser] = useState({
+    user_id: params.id,
     utility_bill: ''
   })
 
@@ -47,9 +92,14 @@ export default function ClientForm() {
   const [payM, setPayM] = useState({
     cvv: '',
     card_number: '',
-    cardType: null,
-    expiration_date: ''
+    card_type: null,
+    expiration_date: '',
+    user_id: params.id
   })
+
+  function encriptarMethodP(datos) {
+    return md5(datos);
+  }
 
   //handle change for payment method
   const handleChangePayM = (e) => {
@@ -68,20 +118,26 @@ export default function ClientForm() {
     event.preventDefault();
   };
 
-  //state for date
-  const [selectedDate, setSelectedDate] = React.useState(new Date('2023-01-11T21:11:54'));
-
-  //handle change date
-  const handleDateChange = (date, newValue) => {
-    setSelectedDate(date);
-    setPayM({ ...payM, expiration_date: newValue })
-  };
-
   return (
     <HelmetProvider>
       <Helmet>
         <style>{'body { background-color: #003748; }'}</style>
       </Helmet>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="container-fluid">
+          <Link className="navbar-brand" to="/">Mande</Link>
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <a className="nav-link active" aria-current="page" href="/login">Iniciar sesion</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
       <Grid
         container
         direction="column"
@@ -120,7 +176,7 @@ export default function ClientForm() {
                   disablePortal
                   id="combo-box-demo"
                   options={cardOptions}
-                  onChange={(event, newValue) => { setPayM({ ...payM, cardType: newValue }) }}
+                  onChange={(event, newValue) => { setPayM({ ...payM, card_type: newValue }) }}
                   sx={{
                     display: "block",
                     margin: " -.5rem 0"
@@ -138,28 +194,28 @@ export default function ClientForm() {
                   onChange={handleChangePayM}
                   InputLabelProps={{ style: { color: 'black' } }}
                 />
-                <MuiPickersUtilsProvider
-                  utils={DateFnsUtils}
-                  name='expiration_date'
-                >
-                  <KeyboardDatePicker
-                    margin=".5 rem 0"
-                    display="block"
-                    style={{
-                      width: "14rem",
-                      display: "block",
-                      margin: "-0.7rem 0 1rem 0"
-                    }}
-                    id="date-picker-dialog"
-                    label="Fecha de expiracion"
-                    format="MM/dd/yyyy"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
+                <Stack>
+                  <label
+                    style={{ color: 'black', margin: " -.2rem 0" }}
+                  >
+                    Fecha de expiracion
+                    <input
+                      type="Date"
+                      name="expiration_date"
+                      style={{
+                        display: "block",
+                        width: '14rem',
+                        height: '3rem',
+                        margin: "1rem 0",
+                        backgroundColor: "#f7f6f6",
+                        border: "1px solid #003748",
+                      }}
+                      onChange={handleChangePayM}
+                    />
+                  </label>
+
+                </Stack>
+
                 <FormControl
                   sx={{
                     display: "block",
@@ -229,21 +285,23 @@ export default function ClientForm() {
                 {img ? <img alt="Preview" height="60" src={URL.createObjectURL(img)} /> : null}
                 <Button
                   variant='contained'
-                  color='primary'
+                  color='info'
                   type='submit'
+                  disabled={!payM.card_type || !payM.card_number || !payM.expiration_date || !payM.cvv || !user.utility_bill}
                   sx={{
                     display: "block",
                     margin: ".5rem 0"
                   }}
                   style={{
-                    backgroundColor: "#0a0a23",
                     color: "white",
                     width: "80%",
                     margin: "0 auto",
                     marginTop: "1rem"
                   }}
                 >
-                  Crear cuenta
+                  {
+                    loading ? <CircularProgress color="info" size={20} /> : 'Registrarse'
+                  }
                 </Button>
               </form>
             </CardContent>

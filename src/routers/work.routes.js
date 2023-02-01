@@ -1,9 +1,13 @@
 const { Router } = require('express');
-const { getAllWork, getWork, createWork, deleteWork, updateWork } = require('../controllers/work.controller.js');
+const { getAllWork, getAllMyWorks, getWork, getActiveWork, createWork, deleteWork, updateWork } = require('../controllers/work.controller.js');
 
 const router = Router();
 
 router.get('/work', getAllWork);
+
+router.get('/work/getAllMyWorks/:id', getAllMyWorks);
+
+router.get('/work/active', getActiveWork);
 
 router.get('/work/:id', getWork);
 
