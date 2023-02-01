@@ -57,7 +57,11 @@ export default function ServiceList() {
               </h1>
               <h1 style={{ display: "flex" }}>
                 <Typography style={{ fontWeight: "bold" }}>Fecha de pago: </Typography>
-                <Typography> {service.pay_date}</Typography>
+                <Typography> {service.pay_date}</Typography>                
+              </h1>
+              <h1 style={{ display: "flex" }}>
+                <Typography style={{ fontWeight: "bold" }}>Estado de pago:</Typography>
+                <Typography> {service.statuspay}</Typography>
               </h1>
             </CardContent>
           </Card>
