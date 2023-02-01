@@ -4,6 +4,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+Remember to run the following commands in the 'client' folder
+
 In the project directory, you can run:
 
 Before executing the UI of the project, please install the necessary dependencies for its correct execution with the following command:
