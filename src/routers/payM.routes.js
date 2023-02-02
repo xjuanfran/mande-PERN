@@ -11,7 +11,7 @@ router.get('/PayMethod/Person/:id', getPayMethodPerson);
 
 router.get('/PayMethod/Validation/:id', getPayMethodValidation);
 
-router.get('/PayMethod/ValidationUser/:id/:card', getPayMethodValidationUser);
+router.get('/PayMethod/ValidationUser/:id/:card/:cvv', getPayMethodValidationUser);
 
 router.post('/PayMethod', createPayMethod);
 

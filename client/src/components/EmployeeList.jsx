@@ -5,6 +5,9 @@ import '../style-sheet/EmployeeList.css'
 import { useEffect } from 'react'
 import { Button, Card, CardContent, Typography } from '@mui/material'
 
+
+///nota falta crear el boton de crear trabajos ojitoo
+
 export default function EmployeeList() {
 
   const [employee, setEmployee] = useState([])

@@ -2,7 +2,7 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import { Card, CardContent, TextField, Typography, Button, CircularProgress, } from "@mui/material";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { FormControl, InputLabel, OutlinedInput } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -18,6 +18,8 @@ const kindCard = [
 ];
 
 export default function InputAdornments() {
+
+  const naigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
 
@@ -67,6 +69,10 @@ export default function InputAdornments() {
     console.log(data);
 
     setLoading(false);
+    e.target.reset();
+
+    alert('Datos actualizados correctamente');
+    naigate(`/${idPerson.id}`)
   };
 
   //Take the values of the inputs and save them in the state
@@ -131,7 +137,7 @@ export default function InputAdornments() {
                 marginBottom: "-2.7rem",
               }}
             >
-              Ingresa tus datos
+              Actualiza tus datos
             </Typography>
             <CardContent>
               <form onSubmit={handleSubmit}>
