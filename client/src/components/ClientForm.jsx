@@ -64,13 +64,13 @@ export default function ClientForm() {
       })
       const dataResultPayM = await dataPayM.json();
       console.log(dataResultPayM);
+      navigate('/');
     } else {
       alert("El metodo de pago ya existe");
     }
 
     setLoading(false);
-    navigate('/');
-    
+    e.target.reset();
   }
 
   const params = useParams();
