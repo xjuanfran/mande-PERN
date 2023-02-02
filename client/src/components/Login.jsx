@@ -48,7 +48,6 @@ export default function Login() {
 
     setLoading(false);
 
-
     if (dataClient.message === "Person not found or does not have this customer role" && dataEmployee.message === "Person not found or does not have this role employed") {
       alert("Usuario no encontrado");
     } else if (dataClient.message === "Person not found or does not have this customer role") { 
@@ -58,11 +57,9 @@ export default function Login() {
     else if (dataEmployee.message === "Person not found or does not have this role employed") {
       //console.log("Cliente");
       navigate(`/${dataClient}`);
-
     }
-  
-    e.target.reset()
     
+    e.target.reset()  
   }
 
   const handleChange = (e) => {
