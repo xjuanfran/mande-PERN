@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Link, useParams } from 'react-router-dom'
 import '../style-sheet/EmployeeList.css'
@@ -9,19 +9,31 @@ export default function EmployeeList() {
 
   const [employee, setEmployee] = useState([])
 
-  const loadInfoEmployee = async () => {
-    const response = await fetch(`http://localhost:4000/work/getAllMyWorks/${idPerson.id}`)
+  const idPerson = useParams();
+  //console.log(idPerson);
+
+  const loadInfoEmployee = useCallback(
+    async () => {
+      const response = await fetch(`http://localhost:4000/work/getAllMyWorks/${idPerson.id}`)
+      const data = await response.json()
+      //console.log(data)
+      setEmployee(data)
+    }, [idPerson.id]
+  )
+
+  const handleDelete = async (id) => {
+    const response = await fetch(`http://localhost:4000/employeesWork/delete/${idPerson.id}/${id}`, {
+      method: 'PUT',
+    })
     const data = await response.json()
-    //console.log(data)
-    setEmployee(data)
+    console.log(data)
+
+    setEmployee(employee.filter((employee) => employee.work_id !== id))
   }
 
   useEffect(() => {
     loadInfoEmployee()
-  }, [])
-
-  const idPerson = useParams();
-  //console.log(idPerson);
+  }, [loadInfoEmployee])
 
   return (
     <HelmetProvider>
@@ -51,11 +63,12 @@ export default function EmployeeList() {
         </div>
       </nav>
 
-      <h1 className='titleMain'>Listado de trabajos</h1>
+      <h1 className='titleMain'>Lista de trabajos</h1>
       {
         employee.map((employee) => (
           <Card
             style={{ marginBottom: '.7rem' }}
+            key={employee.work_id}
           >
             <CardContent
               style={{
@@ -63,22 +76,25 @@ export default function EmployeeList() {
                 justifyContent: 'space-between',
               }}>
               <div>
+                <span className='titleCards'>Trabajo: </span>
                 <Typography>
                   {employee.names}
                 </Typography>
+                <div className='titleCards'>Descripcion de la labor:</div>
                 <Typography>
                   {employee.description}
                 </Typography>
+                <span className='titleCards'>Precio por hora: </span>
                 <Typography>
-                  {employee.price_hour}
+                  {employee.price_hour}$
                 </Typography>
               </div>
-              <div>
-                <Button variant='contained' color='inherit' onClick={() => console.log("hola")}>
+              <div className='buttonsUD'>
+                <Button variant='contained' color='inherit' onClick={() => console.log("Edit")}>
                   Editar
                 </Button>
-                <Button variant='contained' color='warning' onClick={() => console.log("ei")}
-                style ={{marginLeft: '.5rem'}}>
+                <Button variant='contained' color='warning' onClick={() => handleDelete(employee.work_id)}
+                  style={{ marginLeft: '.5rem' }}>
                   Eliminar
                 </Button>
               </div>
