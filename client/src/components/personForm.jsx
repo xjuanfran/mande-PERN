@@ -59,6 +59,7 @@ export default function InputAdornments() {
       }
     })
     const dataResultValidation = await dataValidation.json();
+    
     //Crea en base de los datos la persona y la direccion si la validacion es false
     if (dataResultValidation.message === false) {
       continuePage = true;

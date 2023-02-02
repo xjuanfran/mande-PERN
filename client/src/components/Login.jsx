@@ -15,32 +15,54 @@ export default function Login() {
     email: '',
     password: ''
   })
-  
-  function encriptarPassword(password){
+
+  function encriptarPassword(password) {
     return md5(password);
   }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     user.password = encriptarPassword(user.password);
     setLoading(true);
 
-    const dataUser = await fetch('http://localhost:4000/person/login', {
+    const dataUserClient = await fetch('http://localhost:4000/person/login/client', {
       method: 'POST',
       body: JSON.stringify(user),
       headers: {
         'Content-Type': 'application/json'
       },
     })
-    const data = await dataUser.json();
-    console.log(data);
+
+    const dataClient = await dataUserClient.json();
+    console.log(dataClient);
+
+    const dataUserEmployee = await fetch('http://localhost:4000/person/login/employee', {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    const dataEmployee = await dataUserEmployee.json();
+    console.log(dataEmployee);
 
     setLoading(false);
 
-    if (data.message === "Person not found") {
+
+    if (dataClient.message === "Person not found or does not have this customer role" && dataEmployee.message === "Person not found or does not have this role employed") {
       alert("Usuario no encontrado");
-    } else {
-      navigate(`/${data}`);
+    } else if (dataClient.message === "Person not found or does not have this customer role") { 
+      //console.log("Empleado");
+      navigate(`/employeeList/${dataEmployee}`);
     }
+    else if (dataEmployee.message === "Person not found or does not have this role employed") {
+      //console.log("Cliente");
+      navigate(`/${dataClient}`);
+
+    }
+  
+    e.target.reset()
+    
   }
 
   const handleChange = (e) => {
@@ -86,7 +108,24 @@ export default function Login() {
                     onChange={handleChange}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary btn-block">
+                <div className='autoComplete'>
+                  {/* <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    onChange={handleChange}
+                    name="role"
+                    defaultValue="Por favor seleccione su rol"
+                  >
+                    <option value="">Por favor seleccione su rol</option>
+                    <option value="Cliente">Cliente</option>
+                    <option value="Empleado">Empleado</option>
+                  </select> */}
+                </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-block"
+                  disabled={!user.email || !user.password}
+                >
                   {loading ? <div className="spinner-border" role="status">
                     <span className="visually-hidden">Loading...</span>
                   </div> : 'Iniciar sesion'}

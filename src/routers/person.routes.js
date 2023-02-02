@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { getAllPerson, getPerson, createPerson, personValidation, loginPerson, deletePerson, updatePerson } = require('../controllers/person.controller.js');
+const { getAllPerson, getPerson, createPerson, personValidation, loginPersonClient, loginPersonEmployee,deletePerson, updatePerson } = require('../controllers/person.controller.js');
 
 const router = Router();
 
@@ -11,7 +11,9 @@ router.post('/person', createPerson);
 
 router.post('/person/validation', personValidation);
 
-router.post('/person/login', loginPerson);
+router.post('/person/login/client', loginPersonClient);
+
+router.post('/person/login/employee', loginPersonEmployee);
 
 router.put('/person/delete/:id', deletePerson);
 
