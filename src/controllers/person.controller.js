@@ -57,12 +57,31 @@ const personValidation = async (req, res, next) => {
 }
 
 //Valida si el usuario ya existe en la base de datos
-const loginPerson = async (req, res, next) => {
+const loginPersonClient = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const result = await pool.query("SELECT person_id, email, password FROM person WHERE email = $1 AND password = $2 AND status = 'Y'", [email, password]);
+    const result = await pool.query
+      (
+        "SELECT person_id, email, password FROM person INNER JOIN users ON person.person_id = users.user_id WHERE email = $1 AND person.password = $2 AND person.status = 'Y'", [email, password]
+      );
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Person not found' });
+      return res.status(404).json({ message: "Person not found or does not have this customer role" });
+    }
+    res.json(result.rows[0].person_id);
+  } catch (error) {
+    next(error);
+  }
+}
+
+const loginPersonEmployee = async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    const result = await pool.query
+      (
+        "SELECT person_id, email, password FROM person INNER JOIN employee ON person.person_id = employee.employee_id WHERE email = $1 AND person.password = $2 AND person.status = 'Y'", [email, password]
+      );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Person not found or does not have this role employed" });
     }
     res.json(result.rows[0].person_id);
   } catch (error) {
@@ -108,10 +127,11 @@ const updatePerson = async (req, res, next) => {
 
 module.exports = {
   getAllPerson,
-  getPerson,  
+  getPerson,
   createPerson,
   personValidation,
-  loginPerson,
+  loginPersonClient,
+  loginPersonEmployee,
   deletePerson,
   updatePerson
 }

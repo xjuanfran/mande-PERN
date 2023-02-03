@@ -65,8 +65,8 @@ const getPayMethodValidation = async (req, res, next) => {
 
 const getPayMethodValidationUser = async (req, res, next) => {
   try {
-    const { id, card } = req.params;
-    const result = await pool.query("SELECT * FROM payment_method WHERE user_id = $1 AND card_number = $2 AND status = 'Y'", [id, card]);
+    const { id, card, cvv } = req.params;
+    const result = await pool.query("SELECT * FROM payment_method WHERE user_id = $1 AND card_number = $2 AND cvv = $3 AND status = 'Y'", [id, card, cvv]);
     if (result.rows.length > 0) {
       return res.json({ message: true });
     }

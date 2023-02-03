@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
@@ -11,6 +11,8 @@ import md5 from 'md5';
 
 
 export default function VerificationPayM() {
+
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
 
@@ -48,12 +50,21 @@ export default function VerificationPayM() {
     dataCard.cvv = encriptarPassword(dataCard.cvv);
     dataCard.card_number = encriptarPassword(dataCard.card_number);
 
-    const response = await fetch(`http://localhost:4000/PayMethod/ValidationUser/${idPerson.id}/${dataCard.card_number}`);
+
+    const response = await fetch(`http://localhost:4000/PayMethod/ValidationUser/${idPerson.id}/${dataCard.card_number}/${dataCard.cvv}`);
     const data = await response.json();
     console.log(data);
 
     setLoading(false);
 
+    if(data.message === true){
+      navigate(`/setPayMethod/${idPerson.id}`);
+    }
+    else{
+      alert("Datos incorrectos");
+    }
+
+    e.target.reset() 
   }
 
 const idPerson = useParams();
@@ -109,7 +120,7 @@ return (
               marginBottom: "-2.7rem",
             }}
           >
-            Ingresa tus datos
+            Verifica tus datos
           </Typography>
           <CardContent>
             <form onSubmit={handleSubmit}>
