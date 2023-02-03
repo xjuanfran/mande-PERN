@@ -50,6 +50,7 @@ export default function VerificationPayM() {
     dataCard.cvv = encriptarPassword(dataCard.cvv);
     dataCard.card_number = encriptarPassword(dataCard.card_number);
 
+
     const response = await fetch(`http://localhost:4000/PayMethod/ValidationUser/${idPerson.id}/${dataCard.card_number}/${dataCard.cvv}`);
     const data = await response.json();
     console.log(data);
