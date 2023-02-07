@@ -1,7 +1,0 @@
-DB_HOST = ec2-3-219-229-143.compute-1.amazonaws.com
-DB_DATABASE = d9hi1gartboknn
-DB_USER = scwlvancgqmlxf
-DB_PASSWORD = 96701ffd9a1380177f2ef430155873a49127641002ace2b2f7d8cdc3fbd7518f
-DB_PORT = 5432
-PORTFRONT = 3000
-PORT = 4000

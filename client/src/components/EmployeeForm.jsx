@@ -38,7 +38,7 @@ export default function EmployeeForm() {
 
   const params = useParams();
 
-  //state for employee  
+  //state for employee
   const [employee, setEmployee] = useState({
     employee_id: params.id,
     photo_id: '',
@@ -89,9 +89,9 @@ export default function EmployeeForm() {
 
     const formData = new FormData();
     formData.append("file", image);
-    formData.append("upload_preset", "hbmwrpgt");
+    formData.append("upload_preset", "xqabu9la");
     const responseClaudinary = await fetch(
-      "https://api.cloudinary.com/v1_1/dj48mc1gg/image/upload",
+      "https://api.cloudinary.com/v1_1/dmvpidbrt/image/upload",
       {
         method: "POST",
         headers: {
@@ -128,7 +128,7 @@ export default function EmployeeForm() {
       employee_id: params.id,
       photo_id: employee.photo_id,
       profile_picture: img
-    
+
    }
 
    console.log(completeEmployee)
