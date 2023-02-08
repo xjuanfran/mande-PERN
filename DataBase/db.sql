@@ -75,7 +75,7 @@ CREATE TABLE employees_work (
     employee_id INT,
     work_id INT,
     price_hour INT NOT NULL,
-    description VARCHAR(255),g
+    description VARCHAR(255),
     status VARCHAR(2),
     CONSTRAINT pk_employees_work
     PRIMARY KEY (employee_id, work_id),
@@ -98,7 +98,7 @@ CREATE TABLE pay (
     payment_id INT,
     CONSTRAINT fk_pay_service
     FOREIGN KEY (service_id)
-    REFERENCES service(service_id)
+    REFERENCES service(service_id),
     CONSTRAINT fk_pay_paymentmethod
     FOREIGN KEY (payment_id)
     REFERENCES payment_method(payment_id)
@@ -126,8 +126,11 @@ CREATE TABLE service (
 
 
 INSERT INTO public.works (names,status) VALUES
-	 ('Plomero','Y'),
-	 ('Piloto','N'),
-	 ('Electricista','Y'),
 	 ('Programador','Y'),
-	 ('Piloto','Y');
+	 ('Chofer','N'),
+	 ('Electricista','Y'),
+	 ('Plomero','Y'),
+	 ('Profesor','Y');
+
+
+
