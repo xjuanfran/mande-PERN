@@ -15,7 +15,7 @@ CREATE TABLE address (
     description VARCHAR(500) NOT NULL,
     person_id INT,
     status VARCHAR(2),
-    coordin GEOMETRY(Point, 4326),
+    coordinates GEOMETRY(Point, 4326),
     CONSTRAINT fk_addres_person
     FOREIGN KEY (person_id)
     REFERENCES person(person_id)
@@ -32,9 +32,9 @@ CREATE TABLE users (
 
 CREATE TABLE payment_method (
     payment_id SERIAL PRIMARY KEY,
-    cvv VARCHAR(4) NOT NULL,
-    card_number VARCHAR(20) NOT NULL,
-    card_type VARCHAR(10) NOT NULL,
+    cvv VARCHAR(50) NOT NULL,
+    card_number VARCHAR(50) NOT NULL,
+    card_type VARCHAR(50) NOT NULL,
     expiration_date DATE DEFAULT CURRENT_DATE NOT NULL,
     user_id int,
     status VARCHAR(2),

@@ -21,13 +21,13 @@ const getAllWorkEmployee = async (req, res, next) => {
 
         const geo = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${direccionUsuario}`);
         const data = await geo.json();
-        let coordenates = data[0].lon + " " + data[0].lat;
-        console.log(coordenates);
+        let coordinates = data[0].lon + " " + data[0].lat;
+        console.log(coordinates);
 
         const result = await pool.query("SELECT E.employee_id, P.first_name, P.last_name, " +
             "E.profile_picture, EW.work_id, EW.price_hour, EW.description, " +
             "CASE WHEN total_jobs = 0 THEN 0 ELSE R.rating/total_jobs END scored, A.description AS direccion, " +
-            "ST_Distance(ST_GeographyFromText('Point(" + coordenates + ")'), coordenates) AS distance  "+
+            "ST_Distance(ST_GeographyFromText('POINT (" + coordinates + ")'), coordinates) AS distance  "+
             "FROM address A INNER JOIN employee E " +
                 "ON A.person_id = E.employee_id " +
                 "AND A.status = 'Y' " +
@@ -46,6 +46,7 @@ const getAllWorkEmployee = async (req, res, next) => {
             "ORDER BY " +
             "8, 10, 6 DESC", [id_work, idUser]);
             console.log(id_work, idUser);
+
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Este trabajo aun no tiene empleados' })
         }
@@ -119,7 +120,7 @@ const updateemployee = async (req, res, next) => {
 module.exports = {
     getAllemployee,
     getAllWorkEmployee,
-    getemployee,    
+    getemployee,
     createemployee,
     deleteemployee,
     updateemployee

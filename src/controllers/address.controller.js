@@ -51,11 +51,11 @@ const createAddress = async (req, res, next) => {
     //Obtiene las coordenadas de la dirección
     const geo = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${description}`);
     const data = await geo.json();
-    let coordenates = data[0].lon + " " + data[0].lat;
+    let coordinates = data[0].lon + " " + data[0].lat;
     //Aqui termina la obtención de las coordenadas
 
     //Comienza la inserción de los datos
-    const result = await pool.query("INSERT INTO address (description, person_id, status, coordenates) VALUES ($1, $2, 'Y', ST_GeomFromText('POINT(" + coordenates + ")', 4326)) RETURNING *", [description, person_id]);
+    const result = await pool.query("INSERT INTO address (description, person_id, status, coordinates) VALUES ($1, $2, 'Y', ST_GeomFromText('POINT(" + coordinates + ")', 4326)) RETURNING *", [description, person_id]);
     res.json(result.rows[0]);
   } catch (error) {
     next(error);
@@ -89,7 +89,7 @@ const updateAddress = async (req, res, next) => {
     let coordenates = data[0].lon + " " + data[0].lat;
     //Aqui termina la obtención de las coordenadas
 
-    const result = await pool.query(   
+    const result = await pool.query(
       "UPDATE address SET description = $1, coordenates = ST_GeomFromText('POINT(" + coordenates + ")', 4326) WHERE address_id = $2 RETURNING *", [description, id]
     );
 
