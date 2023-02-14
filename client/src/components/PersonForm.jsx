@@ -1,32 +1,24 @@
-import * as React from "react";
-import IconButton from "@mui/material/IconButton";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Grid from "@mui/material/Grid";
-import { Helmet, HelmetProvider } from "react-helmet-async";
-import { useState } from "react";
-import Autocomplete from "@mui/material/Autocomplete";
-import { Link, useNavigate } from "react-router-dom";
 import md5 from "md5";
+import * as React from "react";
+import { useState } from "react";
+import Grid from "@mui/material/Grid";
 import { Container } from "@mui/system";
-import {
-  Card,
-  CardContent,
-  TextField,
-  Typography,
-  Button,
-  CircularProgress,
-  Box,
-  CssBaseline,
-} from "@mui/material";
+import InputLabel from "@mui/material/InputLabel";
+import IconButton from "@mui/material/IconButton";
+import FormControl from "@mui/material/FormControl";
+import { Link, useNavigate } from "react-router-dom";
+import Autocomplete from "@mui/material/Autocomplete";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import Visibility from "@mui/icons-material/Visibility";
+import InputAdornment from "@mui/material/InputAdornment";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import {Card, CardContent, TextField, Typography, Button, CircularProgress, Box, CssBaseline} from "@mui/material";
 
 const kindUser = [{ label: "Cliente" }, { label: "Empleado" }];
 
 export default function InputAdornments() {
+
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -43,11 +35,48 @@ export default function InputAdornments() {
     type_user: "",
   });
 
+  const [person, setPerson] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
+
+  const handleChangePerson = (e) => {
+    //console.log(e.target.name, e.target.value);
+    setPerson({ ...person, [e.target.name]: e.target.value });
+  };
+
+  const [address, setAddress] = useState({
+    description: "",
+    person_id: "",
+  });
+
+  const handleChangeAddress = (e) => {
+    //console.log(e.target.name, e.target.value);
+    setAddress({ ...address, [e.target.name]: e.target.value });
+  };
+
+  function encriptarPassword(password) {
+    return md5(password);
+  }
+
+  const isEmailValid = (email) => {
+    const emailRegex = /\S+@\S+\.\S+/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setLoading(true);
 
+    if(!isEmailValid(person.email)){
+      alert("La dirección de correo electronico no es valida, por favor revise que su entrada se vea de la siguiente manera: user@example.com");
+      setLoading(false);
+      return;
+    }
     if (person.password.length < 8) {
       alert("La contraseña debe tener almenos 8 digitos");
       setLoading(false);
@@ -128,33 +157,6 @@ export default function InputAdornments() {
     }
   };
 
-  const [person, setPerson] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
-
-  function encriptarPassword(password) {
-    return md5(password);
-  }
-
-  const handleChangePerson = (e) => {
-    //console.log(e.target.name, e.target.value);
-    setPerson({ ...person, [e.target.name]: e.target.value });
-  };
-
-  const [address, setAddress] = useState({
-    description: "",
-    person_id: "",
-  });
-
-  const handleChangeAddress = (e) => {
-    //console.log(e.target.name, e.target.value);
-    setAddress({ ...address, [e.target.name]: e.target.value });
-  };
-
   return (
     <HelmetProvider>
       <Helmet>
@@ -216,6 +218,7 @@ export default function InputAdornments() {
                     <TextField
                       variant="outlined"
                       label="Nombre completo"
+                      fullWidth
                       sx={{
                         display: "block",
                         margin: ".5rem 0",
@@ -229,6 +232,7 @@ export default function InputAdornments() {
                     <TextField
                       variant="outlined"
                       label="Apellidos"
+                      fullWidth
                       sx={{
                         display: "block",
                         margin: ".5rem 0",

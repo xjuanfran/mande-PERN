@@ -51,7 +51,12 @@ const createAddress = async (req, res, next) => {
     //Obtiene las coordenadas de la dirección
     const geo = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${description}`);
     const data = await geo.json();
-    let coordenates = data[0].lon + " " + data[0].lat;
+    if(data.length === 0){
+      return res.status(404).json({ message: 'Address not found' });
+    }
+    else{
+      var coordenates = data[0].lon + " " + data[0].lat;
+    }
     //Aqui termina la obtención de las coordenadas
 
     //Comienza la inserción de los datos
