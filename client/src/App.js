@@ -12,6 +12,7 @@ import HomeVisit from './components/HomeVisit'
 import ServicesList from './components/ServicesList';
 import VerificationPayM from './components/VerificationPayM'
 import EmployeeList from './components/EmployeeList';
+import Address from './components/Address';
 // import ModifyPaymentMethod from './components/ModifyPaymentMethod';
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
         <Route path='/service/record/:id' element={<ServicesList />} />
         <Route path='/verificationPayM/:id' element={<VerificationPayM />} />
         <Route path='/employeeList/:id' element={<EmployeeList />} />
+        <Route path='/address/:id' element={<Address />} />
         {/* <Route path="/person" element={<PersonList />} /> */}
         {/*mising route edit person*/}
         {/*mising route edit client*/}

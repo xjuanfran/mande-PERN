@@ -13,20 +13,12 @@ import Visibility from "@mui/icons-material/Visibility";
 import InputAdornment from "@mui/material/InputAdornment";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import {
-  Card,
-  CardContent,
-  TextField,
-  Typography,
-  Button,
-  CircularProgress,
-  Box,
-  CssBaseline,
-} from "@mui/material";
+import {Card, CardContent, TextField, Typography, Button, CircularProgress, Box, CssBaseline} from "@mui/material";
 
 const kindUser = [{ label: "Cliente" }, { label: "Empleado" }];
 
 export default function InputAdornments() {
+
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -80,10 +72,8 @@ export default function InputAdornments() {
 
     setLoading(true);
 
-    if (!isEmailValid(person.email)) {
-      alert(
-        "La dirección de correo electronico no es valida, por favor revise que su entrada se vea de la siguiente manera: user@example.com"
-      );
+    if(!isEmailValid(person.email)){
+      alert("La dirección de correo electronico no es valida, por favor revise que su entrada se vea de la siguiente manera: user@example.com");
       setLoading(false);
       return;
     }
@@ -147,12 +137,7 @@ export default function InputAdornments() {
         },
       });
       const dataResultAddress = await dataAddress.json();
-      if (dataResultAddress.message === "Address not found") {
-        alert("No se ha podido encontrar la direccion, sera redirigido a una nueva pagina para validar la direccion");
-        continuePage = false;
-        navigate(`/address/${id}`);
-        return;
-      }
+      console.log(dataResultAddress);
     } else {
       continuePage = false;
     }
