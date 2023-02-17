@@ -30,7 +30,7 @@ export default function App() {
         <Route path='/service/record/:id' element={<ServicesList />} />
         <Route path='/verificationPayM/:id' element={<VerificationPayM />} />
         <Route path='/employeeList/:id' element={<EmployeeList />} />
-        <Route path='/address/:id' element={<Address />} />
+        <Route path='/address/:type/:id' element={<Address />} />
         {/* <Route path="/person" element={<PersonList />} /> */}
         {/*mising route edit person*/}
         {/*mising route edit client*/}

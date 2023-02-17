@@ -1,52 +1,25 @@
-import md5 from "md5";
 import * as React from "react";
 import { useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Container } from "@mui/system";
-import InputLabel from "@mui/material/InputLabel";
-import IconButton from "@mui/material/IconButton";
-import FormControl from "@mui/material/FormControl";
-import { Link, useNavigate } from "react-router-dom";
-import Autocomplete from "@mui/material/Autocomplete";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import Visibility from "@mui/icons-material/Visibility";
-import InputAdornment from "@mui/material/InputAdornment";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import {Card, CardContent, TextField, Typography, Button, CircularProgress, Box, CssBaseline} from "@mui/material";
+import {
+  Card,
+  CardContent,
+  TextField,
+  Typography,
+  Button,
+  CircularProgress,
+  Box,
+  CssBaseline,
+} from "@mui/material";
 
-const kindUser = [{ label: "Cliente" }, { label: "Empleado" }];
 
 export default function InputAdornments() {
-
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-
-  const [showPassword, setShowPassword] = React.useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const [kindPerson, setKindPerson] = useState({
-    type_user: "",
-  });
-
-  const [person, setPerson] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
-
-  const handleChangePerson = (e) => {
-    //console.log(e.target.name, e.target.value);
-    setPerson({ ...person, [e.target.name]: e.target.value });
-  };
 
   const [address, setAddress] = useState({
     description: "",
@@ -58,101 +31,40 @@ export default function InputAdornments() {
     setAddress({ ...address, [e.target.name]: e.target.value });
   };
 
-  function encriptarPassword(password) {
-    return md5(password);
-  }
-
-  const isEmailValid = (email) => {
-    const emailRegex = /\S+@\S+\.\S+/;
-    return emailRegex.test(email);
-  };
+  const idPerson = useParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setLoading(true);
 
-    if(!isEmailValid(person.email)){
-      alert("La dirección de correo electronico no es valida, por favor revise que su entrada se vea de la siguiente manera: user@example.com");
-      setLoading(false);
-      return;
-    }
-    if (person.password.length < 8) {
-      alert("La contraseña debe tener almenos 8 digitos");
-      setLoading(false);
-      return;
+    //Contruye el objeto completo para enviar a la tabla address
+    const completeAddress = {
+      description: address.description,
+      person_id: idPerson.id,
+    };
+
+    const dataAddress = await fetch("http://localhost:4000/address", {
+      method: "POST",
+      body: JSON.stringify(completeAddress),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const dataResultAddress = await dataAddress.json();
+    console.log(dataResultAddress);
+    if (dataResultAddress.message === "Address not found") {
+      alert("No se encontro la direccion, por favor intente de nuevo");
     } else {
-      person.password = encriptarPassword(person.password);
-    }
-
-    let continuePage = false;
-    let id = 0;
-
-    //Valida si el correo o el telefono ya existen donde en caso de que exista devuelve True y en caso de que no exista devuelve False
-    const dataValidation = await fetch(
-      "http://localhost:4000/person/validation",
-      {
-        method: "POST",
-        body: JSON.stringify(person),
-        headers: {
-          "Content-Type": "application/json",
-        },
+      if (idPerson.type === "client") {
+        navigate(`/client/${idPerson.id}/new`);
+      } else {
+        navigate(`/employee/${idPerson.id}/new`);
       }
-    );
-    const dataResultValidation = await dataValidation.json();
-
-    if (person.phone.length < 10 || person.phone.length > 10) {
-      alert("El telefono debe tener 10 digitos");
-      continuePage = false;
-      setLoading(false);
-      return;
     }
-
-    //Crea en base de los datos la persona y la direccion si la validacion es false
-    if (dataResultValidation.message === false) {
-      continuePage = true;
-      const data = await fetch("http://localhost:4000/person", {
-        method: "POST",
-        body: JSON.stringify(person),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const dataResult = await data.json();
-      console.log(dataResult);
-      id = dataResult.person_id;
-
-      //Contruye el objeto completo para enviar a la tabla address
-      const completeAddress = {
-        description: address.description,
-        person_id: dataResult.person_id,
-      };
-      //Envia el objeto completo a la tabla address
-      const dataAddress = await fetch("http://localhost:4000/address", {
-        method: "POST",
-        body: JSON.stringify(completeAddress),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const dataResultAddress = await dataAddress.json();
-      console.log(dataResultAddress);
-    } else {
-      continuePage = false;
-    }
+    console.log(idPerson.type);
 
     setLoading(false);
-
-    if (continuePage === true) {
-      if (kindPerson.type_user.label === "Cliente") {
-        navigate(`/client/${id}/new`);
-      } else if (kindPerson.type_user.label === "Empleado") {
-        navigate(`/employee/${id}/new`);
-      }
-    } else {
-      alert("El correo o el telefono ya existen");
-    }
   };
 
   return (
@@ -202,7 +114,7 @@ export default function InputAdornments() {
                 marginBottom: "-2.7rem",
               }}
             >
-              Registrate
+              Por favor registra una dirección
             </Typography>
             <CardContent>
               <Box
@@ -212,55 +124,6 @@ export default function InputAdornments() {
                 sx={{ mt: 3 }}
               >
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      variant="outlined"
-                      label="Nombre completo"
-                      fullWidth
-                      sx={{
-                        display: "block",
-                        margin: ".5rem 0",
-                      }}
-                      name="first_name"
-                      onChange={handleChangePerson}
-                      InputLabelProps={{ style: { color: "black" } }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      variant="outlined"
-                      label="Apellidos"
-                      fullWidth
-                      sx={{
-                        display: "block",
-                        margin: ".5rem 0",
-                      }}
-                      name="last_name"
-                      onChange={handleChangePerson}
-                      InputLabelProps={{ style: { color: "black" } }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
-                      label="Correo electronico"
-                      fullWidth
-                      name="email"
-                      onChange={handleChangePerson}
-                      InputLabelProps={{ style: { color: "black" } }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
-                      label="Telefono/celular"
-                      fullWidth
-                      name="phone"
-                      type="number"
-                      onChange={handleChangePerson}
-                      InputLabelProps={{ style: { color: "black" } }}
-                    />
-                  </Grid>
                   <Grid item xs={12}>
                     <TextField
                       variant="outlined"
@@ -272,70 +135,18 @@ export default function InputAdornments() {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <Autocomplete
-                      disablePortal
-                      fullWidth
-                      id="combo-box-demo"
-                      options={kindUser}
-                      onChange={(event, newValue) => {
-                        setKindPerson({ ...kindPerson, type_user: newValue });
-                      }}
-                      renderInput={(params) => (
-                        <TextField {...params} label="Seleccione un tipo" />
-                      )}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControl fullWidth variant="outlined">
-                      <InputLabel htmlFor="outlined-adornment-password">
-                        Password
-                      </InputLabel>
-                      <OutlinedInput
-                        name="password"
-                        onChange={handleChangePerson}
-                        id="outlined-adornment-password"
-                        type={showPassword ? "text" : "password"}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                              edge="end"
-                            >
-                              {showPassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                        label="Password"
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12}>
                     <Button
                       type="submit"
                       fullWidth
                       variant="contained"
                       color="primary"
-                      disabled={
-                        !person.first_name ||
-                        !person.last_name ||
-                        !person.email ||
-                        !person.phone ||
-                        !person.password ||
-                        !kindPerson.type_user ||
-                        !address.description
-                      }
+                      disabled={!address.description}
                       sx={{ mt: 2 }}
                     >
                       {loading ? (
                         <CircularProgress color="inherit" size={30} />
                       ) : (
-                        "Registrarse"
+                        "Validar"
                       )}
                     </Button>
                   </Grid>

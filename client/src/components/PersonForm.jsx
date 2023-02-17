@@ -150,9 +150,14 @@ export default function InputAdornments() {
       if (dataResultAddress.message === "Address not found") {
         alert("No se ha podido encontrar la direccion, sera redirigido a una nueva pagina para validar la direccion");
         continuePage = false;
-        navigate(`/address/${id}`);
+        if(kindPerson.type_user.label === "Cliente"){
+        navigate(`/address/client/${id}`);
+        }else if(kindPerson.type_user.label === "Empleado"){
+          navigate(`/address/employee/${id}`);
+        }
         return;
       }
+      console.log(dataResultAddress);
     } else {
       continuePage = false;
     }
@@ -296,7 +301,7 @@ export default function InputAdornments() {
                         setKindPerson({ ...kindPerson, type_user: newValue });
                       }}
                       renderInput={(params) => (
-                        <TextField {...params} label="Seleccione un tipo" />
+                        <TextField {...params} label="Seleccione un tipo de usuario" />
                       )}
                     />
                   </Grid>
