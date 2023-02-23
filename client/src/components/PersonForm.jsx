@@ -22,6 +22,7 @@ import {
   CircularProgress,
   Box,
   CssBaseline,
+  Alert,
 } from "@mui/material";
 
 const kindUser = [{ label: "Cliente" }, { label: "Empleado" }];
@@ -74,6 +75,8 @@ export default function InputAdornments() {
     const emailRegex = /\S+@\S+\.\S+/;
     return emailRegex.test(email);
   };
+
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -171,7 +174,8 @@ export default function InputAdornments() {
         navigate(`/employee/${id}/new`);
       }
     } else {
-      alert("El correo o el telefono ya existen");
+      //alert("El correo o el telefono ya existen");
+      setShowAlert(true);
     }
   };
 
@@ -358,6 +362,11 @@ export default function InputAdornments() {
                         "Registrarse"
                       )}
                     </Button>
+                    {showAlert ? (
+                      <Alert severity="error" sx={{ mt: 2 }}>
+                        El correo o el telefono ya existen
+                      </Alert>
+                    ) : null}
                   </Grid>
                 </Grid>
               </Box>
