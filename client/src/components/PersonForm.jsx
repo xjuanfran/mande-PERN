@@ -76,6 +76,7 @@ export default function InputAdornments() {
     return emailRegex.test(email);
   };
 
+  const [error, setError] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -84,14 +85,14 @@ export default function InputAdornments() {
     setLoading(true);
 
     if (!isEmailValid(person.email)) {
-      alert(
-        "La dirección de correo electronico no es valida, por favor revise que su entrada se vea de la siguiente manera: user@example.com"
-      );
+      setError("email");
+      setShowAlert(true);
       setLoading(false);
       return;
     }
     if (person.password.length < 8) {
-      alert("La contraseña debe tener almenos 8 digitos");
+      setError("password");
+      setShowAlert(true);
       setLoading(false);
       return;
     } else {
@@ -115,7 +116,8 @@ export default function InputAdornments() {
     const dataResultValidation = await dataValidation.json();
 
     if (person.phone.length < 10 || person.phone.length > 10) {
-      alert("El telefono debe tener 10 digitos");
+      setError("phone");
+      setShowAlert(true);
       continuePage = false;
       setLoading(false);
       return;
@@ -151,13 +153,16 @@ export default function InputAdornments() {
       });
       const dataResultAddress = await dataAddress.json();
       if (dataResultAddress.message === "Address not found") {
-        alert("No se ha podido encontrar la direccion, sera redirigido a una nueva pagina para validar la direccion");
+        setError("address");
+        setShowAlert(true);
         continuePage = false;
-        if(kindPerson.type_user.label === "Cliente"){
-        navigate(`/address/client/${id}`);
-        }else if(kindPerson.type_user.label === "Empleado"){
+        setTimeout(() => {
+        if (kindPerson.type_user.label === "Cliente") {
+          navigate(`/address/client/${id}`);
+        } else if (kindPerson.type_user.label === "Empleado") {
           navigate(`/address/employee/${id}`);
-        }
+        }},
+        7000);
         return;
       }
       console.log(dataResultAddress);
@@ -174,7 +179,7 @@ export default function InputAdornments() {
         navigate(`/employee/${id}/new`);
       }
     } else {
-      //alert("El correo o el telefono ya existen");
+      setError("email-phone");
       setShowAlert(true);
     }
   };
@@ -305,7 +310,10 @@ export default function InputAdornments() {
                         setKindPerson({ ...kindPerson, type_user: newValue });
                       }}
                       renderInput={(params) => (
-                        <TextField {...params} label="Seleccione un tipo de usuario" />
+                        <TextField
+                          {...params}
+                          label="Seleccione un tipo de usuario"
+                        />
                       )}
                     />
                   </Grid>
@@ -362,11 +370,39 @@ export default function InputAdornments() {
                         "Registrarse"
                       )}
                     </Button>
-                    {showAlert ? (
-                      <Alert severity="error" sx={{ mt: 2 }}>
-                        El correo o el telefono ya existen
-                      </Alert>
-                    ) : null}
+                    {showAlert && (
+                      <div>
+                        {error === "password" && (
+                          <Alert severity="info" sx={{ mt: 2 }}>
+                            La contraseña debe tener al menos 8 caracteres
+                          </Alert>
+                        )}
+                        {error === "email-phone" && (
+                          <Alert severity="warning" sx={{ mt: 2 }}>
+                            El correo o el teléfono ya existen
+                          </Alert>
+                        )}
+                        {error === "email" && (
+                          <Alert severity="error" sx={{ mt: 2 }}>
+                            La dirección de correo electronico no es valida, por
+                            favor revise que su entrada se vea de la siguiente
+                            manera: user@example.com
+                          </Alert>
+                        )}
+                        {error === "phone" && (
+                          <Alert severity="info" sx={{ mt: 2 }}>
+                            El telefono debe tener 10 digitos
+                          </Alert>
+                        )}
+                        {error === "address" && (
+                          <Alert severity="info" sx={{ mt: 2 }}>
+                            No se ha podido encontrar la direccion, sera
+                            redirigido a una nueva pagina para validar la
+                            direccion
+                          </Alert>
+                        )}
+                      </div>
+                    )}
                   </Grid>
                 </Grid>
               </Box>
