@@ -25,9 +25,7 @@ import {
   Alert,
 } from "@mui/material";
 
-
 export default function PersonForm() {
-
   const kindUser = [{ label: "Cliente" }, { label: "Empleado" }];
 
   //** this is a navigate */
@@ -71,18 +69,24 @@ export default function PersonForm() {
   /**
    * function to encrypt the password
    * @param {string} password
-   * @returns {string} password encriptada
+   * @returns {string} password encrypted
    */
   function encriptarPassword(password) {
     return md5(password);
   }
 
+  /**
+   *
+   * @param {string} email
+   * @returns {boolean} true if the email is valid
+   * function to validate the email
+   */
   const isEmailValid = (email) => {
     const emailRegex = /\S+@\S+\.\S+/;
     return emailRegex.test(email);
   };
 
-  //UseStates for error and alert message if the data in form is not valid
+  //UseStates for error or alert message if the data in form is not valid
   const [error, setError] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
 
@@ -109,7 +113,7 @@ export default function PersonForm() {
     let continuePage = false;
     let id = 0;
 
-    //Valida si el correo o el telefono ya existen donde en caso de que exista devuelve True y en caso de que no exista devuelve False
+    //Checks if the email or phone number already exists, if it exists, return True and if it doesn't exist, return False
     const dataValidation = await fetch(
       "http://localhost:4000/person/validation",
       {
@@ -130,7 +134,7 @@ export default function PersonForm() {
       return;
     }
 
-    //Crea en base de los datos la persona y la direccion si la validacion es false
+    //Creates the person and address in the database if the validation is false
     if (dataResultValidation.message === false) {
       continuePage = true;
       const data = await fetch("http://localhost:4000/person", {
@@ -145,12 +149,13 @@ export default function PersonForm() {
       console.log(dataResult);
       id = dataResult.person_id;
 
-      //Contruye el objeto completo para enviar a la tabla address
+      //Builds the complete object to send to the address table
       const completeAddress = {
         description: address.description,
         person_id: dataResult.person_id,
       };
-      //Envia el objeto completo a la tabla address
+
+      //Send the complete object to the address table
       const dataAddress = await fetch("http://localhost:4000/address", {
         method: "POST",
         body: JSON.stringify(completeAddress),
@@ -158,8 +163,9 @@ export default function PersonForm() {
           "Content-Type": "application/json",
         },
       });
+
       const dataResultAddress = await dataAddress.json();
-      if (dataResultAddress.message === "Address not found") {
+      if (dataResultAddress.message === "Cannot read properties of undefined (reading 'lon')") {
         setError("address");
         setShowAlert(true);
         continuePage = false;

@@ -42,7 +42,7 @@ const getAllWorkEmployee = async (req, res, next) => {
                 "ON EW.employee_id = E.employee_id " +
                 "AND EW.status = 'Y' " +
             "WHERE " +
-            "EW.work_id = $1 AND E.employee_id <> $2" +
+            "EW.work_id = $1 AND E.employee_id <> $2 " +
             "ORDER BY " +
             "8, 10, 6 DESC", [id_work, idUser]);
             console.log(id_work, idUser);
