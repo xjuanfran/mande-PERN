@@ -1,6 +1,6 @@
-create database mande;
+CREATE DATABASE mande;
 
-create table person (
+CREATE TABLE person (
     person_id serial primary key,
     first_name varchar(100) NOT NULL,
     last_name varchar(100) NOT NULL,
@@ -9,6 +9,8 @@ create table person (
     status varchar(2),
     password varchar(50) NOT NULL
 );
+
+CREATE EXTENSION postgis;
 
 CREATE TABLE address (
     address_id SERIAL PRIMARY KEY,
@@ -87,23 +89,6 @@ CREATE TABLE employees_work (
     REFERENCES employee(employee_id)
 );
 
-CREATE TABLE pay (
-    pay_id SERIAL PRIMARY KEY,
-    employee_pay INT NOT NULL,
-    profit_mande INT NOT NULL,
-    total_payment INT NOT NULL,
-    pay_date DATE DEFAULT CURRENT_DATE,
-    status VARCHAR(2),
-    service_id INT UNIQUE,
-    payment_id INT,
-    CONSTRAINT fk_pay_service
-    FOREIGN KEY (service_id)
-    REFERENCES service(service_id),
-    CONSTRAINT fk_pay_paymentmethod
-    FOREIGN KEY (payment_id)
-    REFERENCES payment_method(payment_id)
-);
-
 CREATE TABLE service (
     service_id SERIAL PRIMARY KEY,
     hours INT,
@@ -122,6 +107,23 @@ CREATE TABLE service (
     CONSTRAINT fk_service_work
     FOREIGN KEY (work_id)
     REFERENCES works(work_id)
+);
+
+CREATE TABLE pay (
+    pay_id SERIAL PRIMARY KEY,
+    employee_pay INT NOT NULL,
+    profit_mande INT NOT NULL,
+    total_payment INT NOT NULL,
+    pay_date DATE DEFAULT CURRENT_DATE,
+    status VARCHAR(2),
+    service_id INT UNIQUE,
+    payment_id INT,
+    CONSTRAINT fk_pay_service
+    FOREIGN KEY (service_id)
+    REFERENCES service(service_id),
+    CONSTRAINT fk_pay_paymentmethod
+    FOREIGN KEY (payment_id)
+    REFERENCES payment_method(payment_id)
 );
 
 

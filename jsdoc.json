@@ -1,0 +1,16 @@
+{
+    "plugins" : [],
+    "sources": {
+        "include": ["client/components/src"],
+        "includePattern" : "jsx",
+        "exludePattern" : "(node_modules/|docs|tests)"
+    },
+    "templates" : {
+        "cleverLinks" : false,
+        "monospaceLinks" : false
+    },
+    "opts":{
+        "recurse" : true,
+        "destination": "docs/"
+    }
+}
