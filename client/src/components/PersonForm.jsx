@@ -25,8 +25,9 @@ import {
   Alert,
 } from "@mui/material";
 
+const kindUser = [{ label: "Cliente" }, { label: "Empleado" }];
+
 export default function PersonForm() {
-  const kindUser = [{ label: "Cliente" }, { label: "Empleado" }];
 
   //** this is a navigate */
   const navigate = useNavigate();

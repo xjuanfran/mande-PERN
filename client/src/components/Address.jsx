@@ -53,7 +53,7 @@ export default function InputAdornments() {
     });
     const dataResultAddress = await dataAddress.json();
     console.log(dataResultAddress);
-    if (dataResultAddress.message === "Address not found") {
+    if (dataResultAddress.message === "Cannot read properties of undefined (reading 'lon')") {
       alert("No se encontro la direccion, por favor intente de nuevo");
     } else {
       if (idPerson.type === "client") {

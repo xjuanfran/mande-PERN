@@ -286,7 +286,7 @@ export default function ClientForm() {
                   variant='contained'
                   color='info'
                   type='submit'
-                  disabled={!payM.card_type || !payM.card_number || !payM.expiration_date || !payM.cvv || !user.utility_bill}
+                  disabled={!payM.card_type || !payM.card_number || !payM.expiration_date || !payM.cvv || !user.utility_bill || payM.cvv.length < 4 || payM.cvv.length > 4}
                   sx={{
                     display: "block",
                     margin: ".5rem 0"
