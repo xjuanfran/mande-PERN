@@ -1,27 +1,35 @@
-import 'date-fns';
-import md5 from 'md5';
-import React from 'react'
-import { useState } from 'react';
-import Stack from '@mui/material/Stack';
-import { useNavigate } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
-import { Link, useParams } from 'react-router-dom';
-import FormControl from '@mui/material/FormControl';
-import Autocomplete from '@mui/material/Autocomplete';
-import Visibility from '@mui/icons-material/Visibility';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import InputAdornment from '@mui/material/InputAdornment';
-import { Helmet, HelmetProvider } from 'react-helmet-async'
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Grid, Typography, CardContent, TextField, Button, CircularProgress, Card } from '@mui/material'
+import "date-fns";
+import md5 from "md5";
+import React from "react";
+import { useState } from "react";
+import Stack from "@mui/material/Stack";
+import { useNavigate } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
+import { Link, useParams } from "react-router-dom";
+import FormControl from "@mui/material/FormControl";
+import Autocomplete from "@mui/material/Autocomplete";
+import Visibility from "@mui/icons-material/Visibility";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import InputAdornment from "@mui/material/InputAdornment";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import {
+  Grid,
+  Typography,
+  CardContent,
+  TextField,
+  Button,
+  CircularProgress,
+  Card,
+  Alert,
+} from "@mui/material";
 
 //type of card, debit or credit
-const cardOptions = ['Debito', 'Credito'];
+const cardOptions = ["Debito", "Credito"];
 
 export default function ClientForm() {
-
   const navigate = useNavigate();
 
   //state for img
@@ -29,6 +37,10 @@ export default function ClientForm() {
 
   //Hook to manage the loading state
   const [loading, setLoading] = useState(false);
+
+  //UseStates for error or alert message if the data in form is not valid
+  const [error, setError] = useState(null);
+  const [showAlert, setShowAlert] = useState(null);
 
   //on submit form
   const handleSubmit = async (e) => {
@@ -40,61 +52,64 @@ export default function ClientForm() {
     payM.card_number = encriptarMethodP(payM.card_number);
     //console.log(payM);
 
-    const dataUser = await fetch('http://localhost:4000/user', {
-      method: 'POST',
+    const dataUser = await fetch("http://localhost:4000/user", {
+      method: "POST",
       body: JSON.stringify(user),
       headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+        "Content-Type": "application/json",
+      },
+    });
     const dataResultUser = await dataUser.json();
     console.log(dataResultUser);
 
-    const dataValidation = await fetch(`http://localhost:4000/PayMethod/Validation/${payM.card_number}`);
+    const dataValidation = await fetch(
+      `http://localhost:4000/PayMethod/Validation/${payM.card_number}`
+    );
     const dataResultValidation = await dataValidation.json();
 
     if (dataResultValidation.message === false) {
-      const dataPayM = await fetch('http://localhost:4000/PayMethod', {
-        method: 'POST',
+      const dataPayM = await fetch("http://localhost:4000/PayMethod", {
+        method: "POST",
         body: JSON.stringify(payM),
         headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+          "Content-Type": "application/json",
+        },
+      });
       const dataResultPayM = await dataPayM.json();
       console.log(dataResultPayM);
-      navigate('/');
+      navigate("/");
     } else {
-      alert("El metodo de pago ya existe");
+      setError("metodo pago existe");
+      setShowAlert(true);
     }
 
     setLoading(false);
     e.target.reset();
-  }
+  };
 
   const params = useParams();
 
   //state for user
   const [user, setUser] = useState({
     user_id: params.id,
-    utility_bill: ''
-  })
+    utility_bill: "",
+  });
 
   //handle change for user
   const handleChangeUser = (e) => {
     //console.log(e.target.name, e.target.value);
-    setUser({ ...user, [e.target.name]: e.target.value })
-    setImg(e.target.files[0])
-  }
+    setUser({ ...user, [e.target.name]: e.target.value });
+    setImg(e.target.files[0]);
+  };
 
   //state for payment method
   const [payM, setPayM] = useState({
-    cvv: '',
-    card_number: '',
+    cvv: "",
+    card_number: "",
     card_type: null,
-    expiration_date: '',
-    user_id: params.id
-  })
+    expiration_date: "",
+    user_id: params.id,
+  });
 
   function encriptarMethodP(datos) {
     return md5(datos);
@@ -103,8 +118,8 @@ export default function ClientForm() {
   //handle change for payment method
   const handleChangePayM = (e) => {
     //console.log(e.target.name, e.target.value);
-    setPayM({ ...payM, [e.target.name]: e.target.value })
-  }
+    setPayM({ ...payM, [e.target.name]: e.target.value });
+  };
 
   //state for show password
   const [showPassword, setShowPassword] = React.useState(false);
@@ -120,18 +135,34 @@ export default function ClientForm() {
   return (
     <HelmetProvider>
       <Helmet>
-        <style>{'body { background-color: #003748; }'}</style>
+        <style>{"body { background-color: #003748; }"}</style>
       </Helmet>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">Mande</Link>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <Link className="navbar-brand" to="/">
+            Mande
+          </Link>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="/login">Iniciar sesion</a>
+                <a
+                  className="nav-link active"
+                  aria-current="page"
+                  href="/login"
+                >
+                  Iniciar sesion
+                </a>
               </li>
             </ul>
           </div>
@@ -148,14 +179,14 @@ export default function ClientForm() {
             sx={{ mt: 5, borderRadius: ".5rem" }}
             style={{
               backgroundColor: "#f7f6f6",
-              padding: "1rem"
+              padding: "1rem",
             }}
           >
             <Typography
-              variant='h5'
+              variant="h5"
               style={{
                 textAlign: "center",
-                paddingBottom: "1rem"
+                paddingBottom: "1rem",
               }}
             >
               Registro cliente
@@ -164,7 +195,7 @@ export default function ClientForm() {
               style={{
                 color: "black",
                 paddingLeft: "1rem",
-                fontSize: "1.1rem"
+                fontSize: "1.1rem",
               }}
             >
               Metodo de pago
@@ -175,67 +206,97 @@ export default function ClientForm() {
                   disablePortal
                   id="combo-box-demo"
                   options={cardOptions}
-                  onChange={(event, newValue) => { setPayM({ ...payM, card_type: newValue }) }}
+                  onChange={(event, newValue) => {
+                    setPayM({ ...payM, card_type: newValue });
+                  }}
                   sx={{
                     display: "block",
-                    margin: " -.5rem 0"
+                    margin: " -.5rem 0",
                   }}
-                  renderInput={(params) => <TextField {...params} label="Tipo de tarjeta" />}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Tipo de tarjeta" />
+                  )}
                 />
                 <TextField
-                  variant='outlined'
-                  label='Numero de tarjeta'
+                  variant="outlined"
+                  label="Numero de tarjeta"
                   sx={{
                     display: "block",
                     margin: "1.2rem 0",
                   }}
-                  name='card_number'
+                  name="card_number"
                   onChange={handleChangePayM}
-                  InputLabelProps={{ style: { color: 'black' } }}
+                  InputLabelProps={{ style: { color: "black" } }}
                 />
                 <Stack>
                   <label
-                    style={{ color: 'black', margin: " -.2rem 0" }}
+                    style={{
+                      color: "black",
+                      marginBottom: "0.5rem",
+                      display: "block",
+                    }}
                   >
-                    Fecha de expiracion
-                    <input
-                      type="Date"
-                      name="expiration_date"
-                      style={{
-                        display: "block",
-                        width: '14rem',
-                        height: '3rem',
-                        margin: "1rem 0",
-                        backgroundColor: "#f7f6f6",
-                        border: "1px solid #003748",
-                      }}
-                      onChange={handleChangePayM}
-                    />
+                    Fecha de expiración
                   </label>
-
+                  <input
+                    type="date"
+                    name="expiration_date"
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      height: "3rem",
+                      padding: "0.5rem",
+                      backgroundColor: "#f7f6f6",
+                      border: "1px solid #003748",
+                      borderRadius: "0.5rem",
+                      borderColor : "#CFCFCF",
+                      fontSize: "1rem",
+                      marginBottom: "1rem",
+                      boxShadow: "none",
+                      outline: "none",
+                      cursor: "pointer",
+                    }}
+                    onChange={handleChangePayM}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = "#000";
+                      e.target.style.outline = "none";
+                    }}
+                    onBlur={(e) => {
+                      if (!e.target.matches(":focus"))
+                        e.target.style.borderColor = "#003748";
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.borderColor = "#000000";
+                      e.target.style.outline = "none";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!e.target.matches(":focus"))
+                        e.target.style.borderColor = "#DEDEDE";
+                    }}
+                  />
                 </Stack>
-
                 <FormControl
                   sx={{
                     display: "block",
-                    width: '14rem',
-                    margin: "1rem 0"
+                    width: "14rem",
+                    margin: "1rem 0",
                   }}
-                  variant="outlined">
+                  variant="outlined"
+                >
                   <InputLabel
-                    style={{ color: 'black', margin: " -.2rem 0" }}
-                    htmlFor="outlined-adornment-password">Clave de seguridad
+                    style={{ color: "black", margin: " -.2rem 0" }}
+                    htmlFor="outlined-adornment-password"
+                  >
+                    Clave de seguridad
                   </InputLabel>
                   <OutlinedInput
-                    name='cvv'
+                    name="cvv"
                     onChange={handleChangePayM}
-                    style={{ height: '3rem' }}
+                    style={{ height: "3rem" }}
                     id="outlined-adornment-password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     endAdornment={
-                      <InputAdornment
-                        position="end"
-                      >
+                      <InputAdornment position="end">
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={handleClickShowPassword}
@@ -253,60 +314,88 @@ export default function ClientForm() {
                   style={{
                     color: "black",
                     paddingLeft: ".2rem",
-                    fontSize: "1.1rem"
+                    fontSize: "1.1rem",
                   }}
                 >
                   Datos personales
                 </Typography>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  spacing={0}
-                >
+                <Stack direction="row" alignItems="center" spacing={0}>
                   <Typography
-                    sx={{ fontWeight: 'medium', textAlign: 'center', fontSize: 15 }}
-                    style={{ paddingLeft: ".2rem" }} >
+                    sx={{
+                      fontWeight: "medium",
+                      textAlign: "center",
+                      fontSize: 15,
+                    }}
+                    style={{ paddingLeft: ".2rem" }}
+                  >
                     Factura de servicios
                   </Typography>
                   <IconButton
                     color="inherit"
-                    aria-label="upload picture" component="label"
+                    aria-label="upload picture"
+                    component="label"
                   >
                     <input
-                      hidden accept="image/*"
+                      hidden
+                      accept="image/*"
                       type="file"
-                      name='utility_bill'
+                      name="utility_bill"
                       onChange={handleChangeUser}
                     />
                     <PhotoCamera />
                   </IconButton>
                 </Stack>
-                {img ? <img alt="Preview" height="60" src={URL.createObjectURL(img)} /> : null}
+                {img ? (
+                  <img
+                    alt="Preview"
+                    height="60"
+                    src={URL.createObjectURL(img)}
+                  />
+                ) : null}
                 <Button
-                  variant='contained'
-                  color='info'
-                  type='submit'
-                  disabled={!payM.card_type || !payM.card_number || !payM.expiration_date || !payM.cvv || !user.utility_bill || payM.cvv.length < 4 || payM.cvv.length > 4}
+                  variant="contained"
+                  color="info"
+                  type="submit"
+                  disabled={
+                    !payM.card_type ||
+                    !payM.card_number ||
+                    !payM.expiration_date ||
+                    !payM.cvv ||
+                    !user.utility_bill ||
+                    payM.cvv.length < 4 ||
+                    payM.cvv.length > 4
+                  }
                   sx={{
                     display: "block",
-                    margin: ".5rem 0"
+                    margin: ".5rem 0",
                   }}
                   style={{
                     color: "white",
                     width: "80%",
                     margin: "0 auto",
-                    marginTop: "1rem"
+                    marginTop: "1rem",
                   }}
                 >
-                  {
-                    loading ? <CircularProgress color="info" size={20} /> : 'Registrarse'
-                  }
+                  {loading ? (
+                    <CircularProgress color="info" size={20} />
+                  ) : (
+                    "Registrarse"
+                  )}
                 </Button>
+                {showAlert && (
+                  <div>
+                    {error === "metodo pago existe" && (
+                      <Alert severity="error" sx={{ mt: 2 }}>
+                        El metodo de pago ya existe
+                      </Alert>
+                    )}
+                  </div>
+                )}
               </form>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
     </HelmetProvider>
-  )
+  );
 }
