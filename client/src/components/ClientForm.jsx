@@ -16,7 +16,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {
-  Grid,
   Typography,
   CardContent,
   TextField,
@@ -24,6 +23,10 @@ import {
   CircularProgress,
   Card,
   Alert,
+  CssBaseline,
+  Box,
+  Container,
+  Grid,
 } from "@mui/material";
 
 //type of card, debit or credit
@@ -168,15 +171,18 @@ export default function ClientForm() {
           </div>
         </div>
       </nav>
-      <Grid
-        container
-        direction="column"
-        alignItems="center" //vertical
-        justifyContent="center" //horizontal
-      >
-        <Grid item xs={3}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <Card
-            sx={{ mt: 5, borderRadius: ".5rem" }}
+            sx={{ mt: 10, borderRadius: ".5rem" }}
             style={{
               backgroundColor: "#f7f6f6",
               padding: "1rem",
@@ -186,7 +192,7 @@ export default function ClientForm() {
               variant="h5"
               style={{
                 textAlign: "center",
-                paddingBottom: "1rem",
+                marginBottom: "-2.7rem",
               }}
             >
               Registro cliente
@@ -194,208 +200,231 @@ export default function ClientForm() {
             <Typography
               style={{
                 color: "black",
-                paddingLeft: "1rem",
-                fontSize: "1.1rem",
+                textAlign: "center",
+                marginTop: "3rem",
+                fontSize: "1.2rem",
               }}
             >
               Metodo de pago
             </Typography>
             <CardContent>
-              <form onSubmit={handleSubmit}>
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={cardOptions}
-                  onChange={(event, newValue) => {
-                    setPayM({ ...payM, card_type: newValue });
-                  }}
-                  sx={{
-                    display: "block",
-                    margin: " -.5rem 0",
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Tipo de tarjeta" />
-                  )}
-                />
-                <TextField
-                  variant="outlined"
-                  label="Numero de tarjeta"
-                  sx={{
-                    display: "block",
-                    margin: "1.2rem 0",
-                  }}
-                  name="card_number"
-                  onChange={handleChangePayM}
-                  InputLabelProps={{ style: { color: "black" } }}
-                />
-                <Stack>
-                  <label
-                    style={{
-                      color: "black",
-                      marginBottom: "0.5rem",
-                      display: "block",
-                    }}
-                  >
-                    Fecha de expiración
-                  </label>
-                  <input
-                    type="date"
-                    name="expiration_date"
-                    style={{
-                      display: "block",
-                      width: "100%",
-                      height: "3rem",
-                      padding: "0.5rem",
-                      backgroundColor: "#f7f6f6",
-                      border: "1px solid #003748",
-                      borderRadius: "0.5rem",
-                      borderColor : "#CFCFCF",
-                      fontSize: "1rem",
-                      marginBottom: "1rem",
-                      boxShadow: "none",
-                      outline: "none",
-                      cursor: "pointer",
-                    }}
-                    onChange={handleChangePayM}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = "#000";
-                      e.target.style.outline = "none";
-                    }}
-                    onBlur={(e) => {
-                      if (!e.target.matches(":focus"))
-                        e.target.style.borderColor = "#003748";
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.borderColor = "#000000";
-                      e.target.style.outline = "none";
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!e.target.matches(":focus"))
-                        e.target.style.borderColor = "#DEDEDE";
-                    }}
-                  />
-                </Stack>
-                <FormControl
-                  sx={{
-                    display: "block",
-                    width: "14rem",
-                    margin: "1rem 0",
-                  }}
-                  variant="outlined"
-                >
-                  <InputLabel
-                    style={{ color: "black", margin: " -.2rem 0" }}
-                    htmlFor="outlined-adornment-password"
-                  >
-                    Clave de seguridad
-                  </InputLabel>
-                  <OutlinedInput
-                    name="cvv"
-                    onChange={handleChangePayM}
-                    style={{ height: "3rem" }}
-                    id="outlined-adornment-password"
-                    type={showPassword ? "text" : "password"}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Clave de seguridad"
-                  />
-                </FormControl>
-                <Typography
-                  style={{
-                    color: "black",
-                    paddingLeft: ".2rem",
-                    fontSize: "1.1rem",
-                  }}
-                >
-                  Datos personales
-                </Typography>
-                <Stack direction="row" alignItems="center" spacing={0}>
-                  <Typography
-                    sx={{
-                      fontWeight: "medium",
-                      textAlign: "center",
-                      fontSize: 15,
-                    }}
-                    style={{ paddingLeft: ".2rem" }}
-                  >
-                    Factura de servicios
-                  </Typography>
-                  <IconButton
-                    color="inherit"
-                    aria-label="upload picture"
-                    component="label"
-                  >
-                    <input
-                      hidden
-                      accept="image/*"
-                      type="file"
-                      name="utility_bill"
-                      onChange={handleChangeUser}
+              <Box
+                component="form"
+                noValidate
+                onSubmit={handleSubmit}
+                sx={{ mt: 3 }}
+              >
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Autocomplete
+                      disablePortal
+                      fullWidth
+                      id="combo-box-demo"
+                      options={cardOptions}
+                      onChange={(event, newValue) => {
+                        setPayM({ ...payM, card_type: newValue });
+                      }}
+                      sx={{
+                        display: "block",
+                        margin: " -2rem 0rem 0",
+                      }}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Tipo de tarjeta" />
+                      )}
                     />
-                    <PhotoCamera />
-                  </IconButton>
-                </Stack>
-                {img ? (
-                  <img
-                    alt="Preview"
-                    height="60"
-                    src={URL.createObjectURL(img)}
-                  />
-                ) : null}
-                <Button
-                  variant="contained"
-                  color="info"
-                  type="submit"
-                  disabled={
-                    !payM.card_type ||
-                    !payM.card_number ||
-                    !payM.expiration_date ||
-                    !payM.cvv ||
-                    !user.utility_bill ||
-                    payM.cvv.length < 4 ||
-                    payM.cvv.length > 4
-                  }
-                  sx={{
-                    display: "block",
-                    margin: ".5rem 0",
-                  }}
-                  style={{
-                    color: "white",
-                    width: "80%",
-                    margin: "0 auto",
-                    marginTop: "1rem",
-                  }}
-                >
-                  {loading ? (
-                    <CircularProgress color="info" size={20} />
-                  ) : (
-                    "Registrarse"
-                  )}
-                </Button>
-                {showAlert && (
-                  <div>
-                    {error === "metodo pago existe" && (
-                      <Alert severity="error" sx={{ mt: 2 }}>
-                        El metodo de pago ya existe
-                      </Alert>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      label="Numero de tarjeta"
+                      fullWidth
+                      name="card_number"
+                      onChange={handleChangePayM}
+                      InputLabelProps={{ style: { color: "black" } }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <label
+                      style={{
+                        color: "black",
+                      }}
+                    >
+                      Fecha de expiración
+                    </label>
+                    <input
+                      type="date"
+                      name="expiration_date"
+                      style={{
+                        display: "block",
+                        width: "100%",
+                        height: "3rem",
+                        padding: "0.5rem",
+                        backgroundColor: "#f7f6f6",
+                        border: "1px solid #003748",
+                        borderRadius: "0.5rem",
+                        borderColor: "#CFCFCF",
+                        fontSize: "1rem",
+                        boxShadow: "none",
+                        cursor: "pointer",
+                      }}
+                      onChange={handleChangePayM}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = "#000";
+                        e.target.style.outline = "none";
+                      }}
+                      onBlur={(e) => {
+                        if (!e.target.matches(":focus"))
+                          e.target.style.borderColor = "#003748";
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.borderColor = "#000000";
+                        e.target.style.outline = "none";
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!e.target.matches(":focus"))
+                          e.target.style.borderColor = "#DEDEDE";
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth variant="outlined" sx={{marginTop: ".5rem"}}>
+                      <InputLabel
+                        style={{ color: "black", margin: "-.2rem 0" }}
+                        htmlFor="outlined-adornment-password"
+                      >
+                        Clave de seguridad
+                      </InputLabel>
+                      <OutlinedInput
+                        name="cvv"
+                        onChange={handleChangePayM}
+                        style={{ height: "3rem" }}
+                        id="outlined-adornment-password"
+                        type={showPassword ? "text" : "password"}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                            >
+                              {showPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        label="Clave de seguridad"
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography
+                      style={{
+                        color: "black",
+                        paddingLeft: ".2rem",
+                        fontSize: "1.1rem",
+                      }}
+                    >
+                      Datos personales
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      pacing={0}
+                      sx={{ marginTop: "-1rem" }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: "medium",
+                          textAlign: "center",
+                          fontSize: 15,
+                        }}
+                        style={{ paddingLeft: ".2rem" }}
+                      >
+                        Factura de servicios
+                      </Typography>
+                      <IconButton
+                        color="inherit"
+                        aria-label="upload picture"
+                        component="label"
+                      >
+                        <input
+                          hidden
+                          accept="image/*"
+                          type="file"
+                          name="utility_bill"
+                          onChange={handleChangeUser}
+                        />
+                        <PhotoCamera />
+                      </IconButton>
+                    </Stack>
+                  </Grid>
+                  <Grid item xs={12}>
+                    {img ? (
+                      <img
+                        alt="Preview"
+                        style={{ maxWidth: "100%" }}
+                        src={URL.createObjectURL(img)}
+                      />
+                    ) : null}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      variant="contained"
+                      color="info"
+                      type="submit"
+                      disabled={
+                        !payM.card_type ||
+                        !payM.card_number ||
+                        !payM.expiration_date ||
+                        !payM.cvv ||
+                        !user.utility_bill ||
+                        payM.cvv.length < 4 ||
+                        payM.cvv.length > 4
+                      }
+                      sx={{
+                        display: "block",
+                        margin: ".5rem 0",
+                      }}
+                      style={{
+                        color: "white",
+                        width: "80%",
+                        margin: "0 auto",
+                        marginTop: "1rem",
+                      }}
+                    >
+                      {loading ? (
+                        <CircularProgress color="info" size={20} />
+                      ) : (
+                        "Registrarse"
+                      )}
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12}>
+                    {showAlert && (
+                      <div>
+                        {error === "metodo pago existe" && (
+                          <Alert
+                            severity="error"
+                            sx={{ mt: 2, textAlign: "center" }}
+                          >
+                            El metodo de pago ya existe
+                          </Alert>
+                        )}
+                      </div>
                     )}
-                  </div>
-                )}
-              </form>
+                  </Grid>
+                </Grid>
+              </Box>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Container>
     </HelmetProvider>
   );
 }
