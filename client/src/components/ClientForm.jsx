@@ -50,9 +50,17 @@ export default function ClientForm() {
     e.preventDefault();
 
     setLoading(true);
+    /**
+     *
+     * @param {*} data
+     * @returns Encrypted data (cvv and card number)
+     */
+    function encryptPaymentMethod(data) {
+      return md5(data);
+    }
 
-    payM.cvv = encriptarMethodP(payM.cvv);
-    payM.card_number = encriptarMethodP(payM.card_number);
+    payM.cvv = encryptPaymentMethod(payM.cvv);
+    payM.card_number = encryptPaymentMethod(payM.card_number);
     //console.log(payM);
 
     const dataUser = await fetch("http://localhost:4000/user", {
@@ -62,6 +70,7 @@ export default function ClientForm() {
         "Content-Type": "application/json",
       },
     });
+
     const dataResultUser = await dataUser.json();
     console.log(dataResultUser);
 
@@ -113,10 +122,6 @@ export default function ClientForm() {
     expiration_date: "",
     user_id: params.id,
   });
-
-  function encriptarMethodP(datos) {
-    return md5(datos);
-  }
 
   //handle change for payment method
   const handleChangePayM = (e) => {

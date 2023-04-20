@@ -16,13 +16,13 @@ const getAllWorkEmployee = async (req, res, next) => {
     const { id_work, idUser } = req.params;
     try {
 
-        const resultAddress = await pool.query("SELECT description FROM address WHERE address_id = $1 AND status = 'Y'", [idUser]);
+        const resultAddress = await pool.query("SELECT description FROM address WHERE person_id = $1 AND status = 'Y'", [idUser]);
         direccionUsuario = resultAddress.rows[0].description;
 
         const geo = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${direccionUsuario}`);
         const data = await geo.json();
         let coordenates = data[0].lon + " " + data[0].lat;
-        console.log(coordenates);
+
 
         const result = await pool.query("SELECT E.employee_id, P.first_name, P.last_name, " +
             "E.profile_picture, EW.work_id, EW.price_hour, EW.description, " +
